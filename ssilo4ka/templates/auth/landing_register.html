@@ -17,15 +17,18 @@
                         <p id="usernameErrors"></p>
                         <input name='email' id="email" placeholder="Электронная почта">
                         <p id="emailErrors"></p>
+                        <button type="button" id="nextButton" onClick="nextForm()">Continue</button>
                     </div>
                     <div class="secondForm" id="secondForm" style="display:none;">
                         <button id="previousButton" onClick="previousForm()">Back</button>
-                        <input name="password1" id="password" placeholder="Пароль">
+                        <div>
+                            <input type='password' name="password1" id="password" placeholder="Пароль">
+                            <button type="button" id="showPword">Show Password</button>
+                        </div>
                         <p id="passwordErrors"></p>
                         <button type="submit">Register</button>
                     </div>
                 </form>
-                <button id="nextButton" onClick="nextForm()">Continue</button>
             </div>
         </div>
         <script>
@@ -33,6 +36,8 @@
             $(document).ready(function(){
                 validateUsername();
             });
+
+            var pwordVisible=false;
 
             function delay(fn, ms) {
             let timer = 0
@@ -54,6 +59,17 @@
                 validatePassword();
             },750));
         
+            $('#showPword').on('click',function(){
+                if(pwordVisible===false){
+                    document.getElementById('password').type='text';
+                    pwordVisible=true;
+                }
+                else{
+                    document.getElementById('password').type='password';
+                    pwordVisible=false;
+                }
+            });
+
             var usernameLength,usernameDigit;
             function validateUsername(){
                 username=document.getElementById('username').value;

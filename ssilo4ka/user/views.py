@@ -51,4 +51,19 @@ def profile_creation(request):
     c={}
     c['user']=request.user
     c['categories']=Category.objects.all()
+
+    profile=Profile.objects.get(user=request.user)
+
+    if request.method=='POST':
+        rp=request.POST
+        name=rp.get('name')
+        category=rp.get('category')
+        subCategory=rp.get('subCat')
+        profile.name=name
+        profile.category=category
+        profile.subCategory=subCategory
+        
+        return redirect('link:home')
+
+
     return render(request,'auth/profile_creation.html',c)

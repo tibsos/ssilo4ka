@@ -22,7 +22,7 @@ class Profile(m.Model):
     email=m.CharField(max_length=254)
 
     category=m.ForeignKey('Category',on_delete=m.DO_NOTHING,null=True)
-    subcategory=m.ForeignKey('Subcategory',on_delete=m.DO_NOTHING,null=True)
+    subCategory=m.ForeignKey('Subcategory',on_delete=m.DO_NOTHING,null=True)
 
     plan=m.ForeignKey('Plan',on_delete=m.DO_NOTHING,null=True)
     mfa=m.BooleanField(_("Multi-factor Authentication"),default=False)

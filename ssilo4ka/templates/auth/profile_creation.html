@@ -10,44 +10,103 @@
     <body>
         <div>
             <form method="POST">
+                {%csrf_token%}
                 <input name="name" id="name" placeholder="Как вас зовут?">
-                <div id="categories">
-                    {%for category in categories%}
-                    <label>
-                        <input type='radio' name="category" value="{{category.title}}">
-                        <div>{{category.title}}</div>
-                    </label>
-                </div>
-                <div id="subcategories">
-                    {%for subCat in category.subCategory.all%}
-                    <div id="{{category.title}}" style="display:none">
+                <p id="nameError"></p>
+                <div id="categoryForm" style="display:none;">
+                    <div id="categories">
+                        {%for category in categories%}
                         <label>
-                            <input type='radio' name="subCat" value="{{subCat.title}}">
-                            <div>{{subCat.title}}</div>
+                            <input type='radio' name="category" value="{{category.title}}">
+                            <div>{{category.title}}</div>
                         </label>
                     </div>
+                    <div id="subcategories">
+                        {%for subCat in category.subCategory.all%}
+                        <div id="{{category.title}}" style="display:none">
+                            <label>
+                                <input type='radio' name="subCat" value="{{subCat.title}}">
+                                <div>{{subCat.title}}</div>
+                            </label>
+                        </div>
+                        {%endfor%}
+                    </div>
                     {%endfor%}
+                    <p id="categoryError"></p>
                 </div>
-                {%endfor%}
+                
+                <div id="planForm" style="display:none">
+                    <div id="freePlan" >
+                        <label>
+                            <input type='radio' name="plan" value="Free">
+                            <div>Free</div>
+                        </label>
+                    </div>
+                    <div id="premiumPlan">
+                        <label>
+                            <input type='radio' name="plan" value="Premium" checked>
+                            <div>Premium</div>
+                        </label>
+                    </div>
+                </div>
+                <div id="firstLink" style="display:none;">
+                    <input name="link" placeholder="URL" id="url">
+                    <p id="urlError"></p>
+                </div>
+                <div id="done" style="display:none;">
+                    <h1>Lets roll!</h1>
+                </div>
+                <button type="submit" id="doneBtn">Done!</button>
+                <button id="continue1" type="button">Continue1</button>
+                <button id="continue2" type="button">Continue2</button>
+                <button id="continue3" type="button">Continue3</button>
+                <button id="skip" type="button">Skip</button>
+                <button id="continue4" type="button">Continue4</button>
             </form>
-            <button id="continue">Continue</button>
         </div>
     </body>
 
     <script>
     
-        $('#continue').on('click',function(){
+        $('#continue1').on('click',function(){
            name=document.getElementById('name').value; 
            if(name.length===0){
-                alert('name empty');
+                document.getElementById('nameError').innerHTML='Пожалуйста, укажите свое имя.'
+           }
+           else{
+                document.getElementById('categoryForm').style.display='';
            }
         });
-
+        $('#continue2').on('click',function(){
+           if(($("input[name='category']:checked").length === 0)){
+               document.getElementById('categoryError').innerText='Пожалуйста, выберите хотя бы одно направление.';
+            }
+            else{
+                document.getElementById('planForm').style.display='';
+           }
+        });
         $("input[name='category']").change(function(){
             category=$('input[name="category"]:checked').val();
             document.getElementById(category).style.display='';
             
         });
+        $('#continue3').on('click',function(){
+            document.getElementById('firstLink').style.display='';
+        });
+        $('#continue4').on('click',function(){
+            url=document.getElementById('url').value
+            if(/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test( url )===true){
+                document.getElementById('done').style.display='';
+            }
+            else{
+                document.getElementById('urlError').innerText='Введите корректную ссылку.';
+            }
+        });
+        $('#skip').on('click',function(){
+            document.getElementById('done').style.display='';
+        });
+
+
 
     </script>
 
