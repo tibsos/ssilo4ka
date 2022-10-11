@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        
+
+    </head>
+
+    <body>
+        <div class="form-wrapper">
+            <div class="form">
+                <form method="POST">
+                    {%csrf_token%}
+                    <div class="firstForm" id="firstForm">
+                        <input name='username' id="username" placeholder="ник" value="{{username}}">
+                        <p id="usernameErrors"></p>
+                        <input name='email' id="email" placeholder="Электронная почта">
+                        <p id="emailErrors"></p>
+                    </div>
+                    <div class="secondForm" id="secondForm" style="display:none;">
+                        <button id="previousButton" onClick="previousForm()">Back</button>
+                        <input name="password1" id="password" placeholder="Пароль">
+                        <p id="passwordErrors"></p>
+                        <button type="submit">Register</button>
+                    </div>
+                </form>
+                <button id="nextButton" onClick="nextForm()">Continue</button>
+            </div>
+        </div>
+        <script>
+
+            $(document).ready(function(){
+                validateUsername();
+            });
+
+            function delay(fn, ms) {
+            let timer = 0
+            return function(...args) {
+                clearTimeout(timer)
+                timer = setTimeout(fn.bind(this, ...args), ms || 0)
+            }
+            }
+
+            $('#username').keyup(delay(function(e){
+                validateUsername();
+            },750));
+
+            $('#email').keyup(delay(function(e){
+                validateEmail();
+            },500));
+
+            $('#password').keyup(delay(function(e){
+                validatePassword();
+            },750));
+        
+            var usernameLength,usernameDigit;
+            function validateUsername(){
+                username=document.getElementById('username').value;
+                if (username.length<4){
+                    document.getElementById('usernameErrors').innerText='>3 letters';
+                    usernameLength=false;
+                }
+                else{
+                    usernameLength=true;
+                }
+                if(usernameLength===true){
+                    $.ajax({
+                        url:"{%url 'user:check-username'%}",
+                        data:{
+                            'csrfmiddlewaretoken':'{{csrf_token}}',
+                            'username':username,
+                        },
+                        method:'POST',
+                        success:function(response, status, XHR){
+                            var result = response['response'];
+                            document.getElementById('usernameErrors').innerText=result;
+                            document.getElementById('registerButton').className='yes'
+                        }
+                    });
+                }
+            }
+            
+            var emailValid;
+            function validateEmail(){
+                email=document.getElementById('email').value;
+                if(isNaN(email.charAt(0))===true) {
+                    if(email.length>6){
+                        if(email.includes('@')===true){
+                            afterAt=email.split('@')[1];
+                            domain=afterAt.split('.')[0];
+                            domainLength=domain.length;
+                            if((domainLength>2) && (domainLength<64)){
+                                afterAtProcessed=afterAt.slice(1,afterAt.length);
+                                if((afterAtProcessed.match(/\./g)).length===1){
+                                    domainIdentifier=afterAt.split('.')[1];
+                                    if(domainIdentifier.length>1){
+
+                                    }
+                                }
+                            }
+                                
+                        }
+                    }
+                }  
+                else{
+                    emailValid=false;
+                }
+            }
+
+            var passwordLength, passwordDigit;
+            function validatePassword(){
+                password=document.getElementById('password').value;
+                if (password.length<7){
+                    document.getElementById('passwordErrors').innerText='>=8 letters';
+                    passwordLength=false;
+                }
+                else{
+                    passwordLength=true;
+                }
+                if((passwordLength===true) && (/\d/.test(password)===false)){
+                    document.getElementById('passwordErrors').innerText='>0 numbers';
+                    passwordDigit=false;
+                }
+                else{
+                    passwordDigit=true;
+                }
+                if(passwordDigit===true && passwordLength===true){
+                    document.getElementById('passwordErrors').innerText='ok';
+                }
+            }
+            
+
+            function nextForm(){
+                document.getElementById('firstForm').style.display='none';
+                document.getElementById('nextButton').style.display='none';
+                document.getElementById('secondForm').style.display='';
+            }
+            function previousForm(){
+                document.getElementById('firstForm').style.display='';
+                document.getElementById('nextButton').style.display='';
+                document.getElementById('secondForm').style.display='none';
+            }
+    
+    
+        </script>
+    </body>
+
+    
+
+</html>

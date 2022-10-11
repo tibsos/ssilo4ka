@@ -1,3 +1,6 @@
-from django.contrib import admin
+from django.contrib import admin as a
+from .models import *
 
-# Register your models here.
+a.site.register(Profile)
+a.site.register(Category)
+a.site.register(Subcategory)

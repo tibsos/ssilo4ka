@@ -6,7 +6,11 @@
     </head>
 
     <body>
-
+        <form method='POST'>
+            {%csrf_token%}
+            <input name='username' placeholder="ник">
+            <button type="submit">Получить мою ссылочку</button>
+        </form>
     </body>
 
     <script>

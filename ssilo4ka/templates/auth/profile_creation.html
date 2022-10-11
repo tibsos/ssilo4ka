@@ -1,0 +1,54 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link rel='stylesheet' href="{%static 'css/auth/profile_creation.css'%}">
+    </head>
+
+    <body>
+        <div>
+            <form method="POST">
+                <input name="name" id="name" placeholder="Как вас зовут?">
+                <div id="categories">
+                    {%for category in categories%}
+                    <label>
+                        <input type='radio' name="category" value="{{category.title}}">
+                        <div>{{category.title}}</div>
+                    </label>
+                </div>
+                <div id="subcategories">
+                    {%for subCat in category.subCategory.all%}
+                    <div id="{{category.title}}" style="display:none">
+                        <label>
+                            <input type='radio' name="subCat" value="{{subCat.title}}">
+                            <div>{{subCat.title}}</div>
+                        </label>
+                    </div>
+                    {%endfor%}
+                </div>
+                {%endfor%}
+            </form>
+            <button id="continue">Continue</button>
+        </div>
+    </body>
+
+    <script>
+    
+        $('#continue').on('click',function(){
+           name=document.getElementById('name').value; 
+           if(name.length===0){
+                alert('name empty');
+           }
+        });
+
+        $("input[name='category']").change(function(){
+            category=$('input[name="category"]:checked').val();
+            document.getElementById(category).style.display='';
+            
+        });
+
+    </script>
+
+</html>

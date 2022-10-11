@@ -1,4 +1,9 @@
-from django.shortcuts import render
-
+from django.shortcuts import render,redirect
 def landing(request):
+
+    if request.method=='POST':
+        username=request.POST.get('username')
+        return redirect('user:landing_register',username=username)
+
     return render(request,'landing.html')
+

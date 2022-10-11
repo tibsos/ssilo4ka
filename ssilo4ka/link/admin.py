@@ -1,3 +1,5 @@
-from django.contrib import admin
+from django.contrib import admin as a
+from .models import Block,Link
 
-# Register your models here.
+a.site.register(Block)
+a.site.register(Link)

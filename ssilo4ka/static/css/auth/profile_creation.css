@@ -1,0 +1,16 @@
+label {
+    display : block;
+    width: 400px;
+}
+label > input{ /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+}
+label > input + div{ /* DIV STYLES */
+    cursor:pointer;
+    border:2px solid transparent;
+}
+label > input:checked + div{ /* (RADIO CHECKED) DIV STYLES */
+    background-color: #ffd6bb;
+    border: 1px solid #ff6600;
+}

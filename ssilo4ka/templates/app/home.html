@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+    </head>
+
+    <body>
+
+        <form method="POST">
+            {%csrf_token%}
+            <button hx-post="{%url 'add-link'%}" hx-target="#blocks">Добавить новую ссылку</button>
+        </form>
+
+        <div id="blocks">
+            {%include 'app/partials/blocks.html'%}
+        </div>
+
+    </body>
+
+    <script>
+    
+    </script>
+
+</html>
