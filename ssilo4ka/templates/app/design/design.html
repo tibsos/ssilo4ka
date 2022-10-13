@@ -1,0 +1,118 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link rel='stylesheet' href="{%static 'css/app/design.css'%}">
+    </head>
+
+    <body>
+        <div class="main">
+
+            <div class="design">
+                
+                <div class="profile">
+                    <div class="avatar">
+                        {%if profile.avatar%}
+                        <img id='avatar' src="{{profile.avatar.url}}" alt="@{{profile.user.username}} аватар">
+                        <div class="buttons">
+                            <form method="POST" enctype='multipart/form-data'>
+                                {%csrf_token%}
+                                <input type="hidden" name="form_type" value="avatar-form">
+                                {{avatar_form.avatar}}
+                                <button id="select-image">Выбрать картинку</button>
+                                <button id="submit-image" type="submit" style="display: none;"></button>
+                            </form>
+                            <form method="POST" enctype='multipart/form-data' action="{%url 'link:delete-avatar'%}">
+                                {%csrf_token%}
+                                <button id="delete-avatar">Удалить аву</button>
+                            </form>
+                        </div>
+                        {%else%}
+                        <div class="circle">
+                            {%if profile.title%}
+                                <p>{{profile.title|capfirst}}</p>
+                            {%else%}
+                                <p>{{profile.user.username|capfirst}}</p>
+                            {%endif%}
+                        </div>
+                        <div class="buttons">
+                            <form method="POST" enctype='multipart/form-data'>
+                                {%csrf_token%}
+                                <input type="hidden" name="form_type" value="avatar-form">
+                                {{avatar_form.avatar}}
+                                <button id="select-image">Выбрать картинку</button>
+                                <button id="submit-image" type="submit" style="display: none;"></button>
+                            </form>
+                        </div>
+                        {%endif%}
+                    </div>
+
+                    <div class="details">
+                        <input name="profile-title" id='profile-title' value="{{profile.title}}" placeholder="Название ссылочки">
+                        <input name="profile-bio" id='profile-bio' value="{{profile.bio}}" placeholder="Описание ссылочки">
+                    </div>
+
+                    <div class="premium-plan-CTA">
+                        <div class="image">
+
+                        </div>
+                        <div class="text">
+                            <h3>Откройте для себя возможности премиум версии.</h3><!-- change -->
+                            <ul>
+                                <li class="feature">Уберите наш логотип с вашей ссылочки</li>
+                                <li class="feature">Анализируйте эффективность вашей ссылочки за все время</li>
+                            </ul>
+                        </div>
+                        <button>Узнать больше</button>
+
+                    </div>
+                    
+                    <div class="themes">
+                        {%for theme in themes%}
+                            <div class="theme">
+                                <div class="preview">
+                                    <img src="{{theme.preview.url}}" alt="{{theme.title}} предпросмотр">
+                                </div>
+                                {{theme.title}}
+                            </div>
+                        {%endfor%}
+                    </div>
+
+                </div>
+
+            </div>
+                
+            <div class="ssilo4ka">
+                <div class="phone">
+                    
+                </div>
+            </div>
+
+        </div>
+    </body>
+
+    <script>
+        $('#select-image').on('click',function(){
+            document.getElementById('avatar-form').click();
+        });
+        $('#avatar-form').on('change',function(){
+            document.getElementById('submit-image').click();
+        })
+        $('#delete-avatar').on('click',function(){
+            $.ajax({
+                url:"{%url 'link:delete-avatar'%}",
+                data:{
+                    'csrfmiddlewaretoken':"{{csrf_token}}",
+                },
+                method:'POST',
+                success:function(){
+                    document.getElementById('avatar').remove();
+                }
+            });
+        });
+    </script>
+
+</html> 

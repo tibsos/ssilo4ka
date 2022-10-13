@@ -1,25 +1,96 @@
+{%load static%}
 <!DOCTYPE html>
 <html>
 
     <head>
         <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+        <link rel='stylesheet' href="{%static 'css/app/home.css'%}">
     </head>
 
     <body>
 
+        <div class="main">
+        
+            <div class='nav'>
+                <div class="logo"><a href="{%url 'link:home'%}">ssilo4ka logo</a></div>
+                <div class="left">
+                    <ul class="nav">
+                        <li>
+                            <a href="{%url 'link:home'%}">Ссылки</a>
+                        </li>
+                        <li>
+                            <a href="{%url 'link:design'%}">Дизайн</a>
+                        </li>
+                        <li>
+                            <a href="{%url 'link:analytics'%}">Аналитика</a>
+                        </li>
+                        <li>
+                            <a href="{%url 'link:settings'%}">Настройки</a>
+                        </li>
+                    </ul>   
+                </div>
+                <div class="right">
+                    <ul class="nav">
+                        <li>
+                            <a href="{%url 'link:upgrade'%}">Премиум</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+                
+        <div class="methods">
+            <form method="POST">
+                {%csrf_token%}
+            <button hx-post="{%url 'link:add-link'%}" hx-target="#blocks">Добавить новую ссылку</button>
+            </form>
+            <button id="delete-all">Удалить все</button>
+        </div>
+        <div id="blocks">
+            {%include 'app/links/blocks.html'%}
+        </div>
+        
+    </div>
+
+    <div id="delete-all-form" class="delete-all" style="display:none;">
+        <h4>Начнем с чистого листа?</h4>
         <form method="POST">
             {%csrf_token%}
-            <button hx-post="{%url 'add-link'%}" hx-target="#blocks">Добавить новую ссылку</button>
+            <button hx-post="{% url 'link:delete-all'%}" hx-target="#blocks" id="delete-all-btn">Удалить</button>
         </form>
-
-        <div id="blocks">
-            {%include 'app/partials/blocks.html'%}
-        </div>
+        <button id="cancel">Отмена</button>
+    </div>
 
     </body>
 
     <script>
-    
+
+        document.body.addEventListener('htmx:configRequest',(event)=>{
+        event.detail.headers['X-CSRFToken']="{{csrf_token}}";
+        })
+
+        htmx.onLoad(function(content) {
+    var sortables = content.querySelectorAll(".sortable");
+    for (var i = 0; i < sortables.length; i++) {
+      var sortable = sortables[i];
+      new Sortable(sortable, {
+          animation: 150,
+          ghostClass: 'blue-background-class'
+      });
+    }
+})
+
+        $('#delete-all').on('click',function(){
+            document.getElementById('delete-all-form').style.display='';
+        });
+        $('#cancel').on('click',function(){
+            document.getElementById('delete-all-form').style.display='none';
+        });
+        $('#delete-all-btn').on('click',function(){
+            document.getElementById('delete-all-form').style.display='none';
+        });
     </script>
 
 </html>

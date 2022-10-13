@@ -17,6 +17,7 @@ def ua(instance,filename):
 
 class Profile(m.Model):
 
+    uid=m.UUIDField(default=u4)
     user=m.OneToOneField(User,on_delete=m.CASCADE,related_name='profile')
     name=m.CharField(max_length=255,blank=True,null=True)
     email=m.CharField(max_length=254)
@@ -28,9 +29,9 @@ class Profile(m.Model):
     mfa=m.BooleanField(_("Multi-factor Authentication"),default=False)
 
     # Profile Details
-    avatar=m.ImageField(upload_to=ua,blank=True,null=True)
-    title=m.CharField(max_length=30,blank=True,null=True)
-    bio=m.TextField(max_length=100,blank=True,null=True)
+    avatar=m.ImageField(upload_to=ua)
+    title=m.CharField(max_length=30,default='')
+    bio=m.TextField(max_length=100,default='')
 
     # Начинка
     block=m.ManyToManyField(Block,blank=True,related_name='profile_blocks')
@@ -57,7 +58,6 @@ def update_profile_signal(sender,instance,created,**kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
-
 
 class Category(m.Model):
     title=m.CharField(max_length=20)
