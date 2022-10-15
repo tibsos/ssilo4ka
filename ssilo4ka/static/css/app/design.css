@@ -1,3 +1,105 @@
+/* Navbar */
+
+/* General */
+
+body{
+    background-color: #F5F5F5;
+}
+
+.wrapper{
+    width:600px;
+    height:100%;
+    padding-top:10px;
+    padding-left:25px;
+    padding-right:25px;
+    padding-bottom:20px;
+    border-radius:30px;
+    background-color: white;
+    margin-bottom: 50px;
+    
+}
+
+.wrapper ul {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+  }
+  
+  .wrapper ul li {
+    padding:0;
+    padding-right:20px;
+    list-style: none;
+    flex: 0 0 25%;
+  }
+
+.block{
+    width:150px;
+    height:270px;
+    display:block;
+    padding-bottom:10px;
+    margin:0px;
+    cursor: pointer;
+    text-align: center;
+}
+
+
+.image-wrapper{
+    height:250px;
+    border:1px solid black;
+    position: relative;
+}
+
+.title{
+    font-size:16px;
+    margin-top:18px;
+    margin-bottom:5px;
+}
+
+.image{
+    width:150px;
+    height:250px;
+    object-fit:cover;
+    border-radius:10px;
+    display:block;
+    margin:auto;
+    position: relative;
+}
+
+label {
+    display : block;
+    width:150px;
+    height:250px;
+}
+label > input{ /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+}
+label > input + div{ /* DIV STYLES */
+    cursor:pointer;
+    border:2px solid transparent;
+    height:250px;
+}
+label > input:checked + div{ /* (RADIO CHECKED) DIV STYLES */
+    border: 1px solid #ff6600;
+    border-radius:10px;
+    height:250px;
+
+}
+
+label > input:checked + div>span{
+    width:100px;
+}
+
+/* Details */
+
 .avatar-form{
     display:none;
 }
+
+
+/* Themes */
+
+
+
+
+/* Self-made */

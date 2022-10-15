@@ -18,6 +18,28 @@
                 {% if block.link%}
                 <input class="title" name="title" value="{{block.link.title}}" id="{{block.uid}}" placeholder="Заголовок" onfocusout="updateTitle(this.id,this.value)">
                 <input name="url" class='url' value="{{block.link.url}}" id="{{block.uid}}" placeholder="Ссылка" onfocusout="updateURL(this.id,this.value)">
+                <div class="functions">
+                    <ul>
+                        <li>
+                            <!-- Prioritize -->
+                        </li>
+                        <li>
+                            <!-- Thumbnail -->
+                        </li>
+                        <li>
+                            <!-- Redirect -->
+                        </li>
+                        <li>
+                            <!-- Lock -->
+                        </li>
+                        <li>
+                            <!-- Schedule -->
+                        </li>
+                        <li>
+                            <!-- Analytics -->
+                        </li>
+                    </ul>
+                </div>
                 <div id="urlError" style="display:none;">
                     <p>Пожалуйста, введите корректную ссылку.</p>
                 </div>

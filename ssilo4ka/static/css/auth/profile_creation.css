@@ -1,6 +1,6 @@
 label {
     display : block;
-    width: 400px;
+    width: 450px;
 }
 label > input{ /* HIDE RADIO */
     visibility: hidden; /* Makes input not-clickable */

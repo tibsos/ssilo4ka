@@ -9,6 +9,7 @@ from django.db.models.signals import post_save
 from uuid import uuid4 as u4
 
 from link.models import Block
+from link.design import Theme,Background,Button,Font
 
 def ua(instance,filename):
     e=filename.split('.')[-1]
@@ -37,9 +38,11 @@ class Profile(m.Model):
     block=m.ManyToManyField(Block,blank=True,related_name='profile_blocks')
 
     # Appearance
-    background=m.ForeignKey('Background',on_delete=m.DO_NOTHING,null=True)
-    button=m.ForeignKey('Button',on_delete=m.DO_NOTHING,null=True)
-    font=m.ForeignKey('Font',on_delete=m.DO_NOTHING,null=True)
+    
+    theme=m.ForeignKey(Theme,on_delete=m.DO_NOTHING,null=True)
+    background=m.ForeignKey(Background,on_delete=m.DO_NOTHING,null=True)
+    button=m.ForeignKey(Button,on_delete=m.DO_NOTHING,null=True)
+    font=m.ForeignKey(Font,on_delete=m.DO_NOTHING,null=True)
 
     # Premium
     logoHidden=m.BooleanField(default=False)
@@ -73,27 +76,5 @@ class Subcategory(m.Model):
 class Plan(m.Model):
     title=m.CharField(max_length=255)
     price=m.PositiveSmallIntegerField(_("Price [RUB]"),)
-    def __str__(self):
-        return self.title
-
-
-class Background(m.Model):
-
-    title=m.CharField(max_length=20)
-
-    def __str__(self):
-        return self.title
-
-class Button(m.Model):
-
-    title=m.CharField(max_length=20)
-
-    def __str__(self):
-        return self.title
-
-class Font(m.Model):
-
-    title=m.CharField(max_length=20)
-
     def __str__(self):
         return self.title

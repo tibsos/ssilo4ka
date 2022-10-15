@@ -4,21 +4,24 @@
 
     <head>
         <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <link rel='stylesheet' href="{%static 'css/app/design.css'%}">
     </head>
-
+    
     <body>
+        
         <div class="main">
 
             <div class="design">
                 
-                <div class="profile">
+                <div class="wrapper">
+                    <!-- https://www.youtube.com/watch?v=oWd7SAuCIRM -->
                     <div class="avatar">
                         {%if profile.avatar%}
                         <img id='avatar' src="{{profile.avatar.url}}" alt="@{{profile.user.username}} аватар">
                         <div class="buttons">
-                            <form method="POST" enctype='multipart/form-data'>
+                            <form method="POST" enctype='multipart/form-data' novalidate="" id="avatar-form-ajax">
                                 {%csrf_token%}
                                 <input type="hidden" name="form_type" value="avatar-form">
                                 {{avatar_form.avatar}}
@@ -54,9 +57,9 @@
                         <input name="profile-title" id='profile-title' value="{{profile.title}}" placeholder="Название ссылочки">
                         <input name="profile-bio" id='profile-bio' value="{{profile.bio}}" placeholder="Описание ссылочки">
                     </div>
-
-                    <div class="premium-plan-CTA">
-                        <div class="image">
+                </div>
+                    <div class="premium">
+                        <div class="image-wrapper">
 
                         </div>
                         <div class="text">
@@ -67,21 +70,48 @@
                             </ul>
                         </div>
                         <button>Узнать больше</button>
-
                     </div>
                     
-                    <div class="themes">
-                        {%for theme in themes%}
-                            <div class="theme">
-                                <div class="preview">
-                                    <img src="{{theme.preview.url}}" alt="{{theme.title}} предпросмотр">
+                    <div class="wrapper">
+                        <ul>
+                            {%for theme in themes%}
+                            <li>
+                                <div class="block">
+                                    <label>
+                                        <input type="radio" name='theme' id="theme" value="{{theme.title}}" >
+                                        <div class="image-wrapper">
+                                                <img src="{{theme.preview.url}}" id="{{theme.title}}" alt="{{theme.title}} предпросмотр" class="image">
+                                        </div>
+                                    </label>
+                                    <p class="title">{{theme.title}}</p>
                                 </div>
-                                {{theme.title}}
-                            </div>
-                        {%endfor%}
+                                {%endfor%}
+                            </li>
+                        </ul>
                     </div>
 
-                </div>
+                    <div class="custom">
+                        <!-- custom appearance info -->
+
+                        <!-- https://iro.js.org/ -->
+                    </div>
+
+                    <div class="wrapper">
+                        <!-- custom appearance -->
+                    </div>
+
+                    <div class="wrapper">
+                        <!-- buttons -->
+                    </div>
+
+                    <div class="wrapper">
+                        <!-- fonts -->
+                    </div>
+                    <div class="wrapper">
+                        <!-- logo -->
+                    </div>
+
+                
 
             </div>
                 
@@ -92,27 +122,13 @@
             </div>
 
         </div>
+
+        <script src="{%static 'js/app/design.js'%}" ></script>
     </body>
 
     <script>
-        $('#select-image').on('click',function(){
-            document.getElementById('avatar-form').click();
-        });
-        $('#avatar-form').on('change',function(){
-            document.getElementById('submit-image').click();
-        })
-        $('#delete-avatar').on('click',function(){
-            $.ajax({
-                url:"{%url 'link:delete-avatar'%}",
-                data:{
-                    'csrfmiddlewaretoken':"{{csrf_token}}",
-                },
-                method:'POST',
-                success:function(){
-                    document.getElementById('avatar').remove();
-                }
-            });
-        });
+
+
     </script>
 
 </html> 

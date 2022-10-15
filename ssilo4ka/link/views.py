@@ -1,8 +1,11 @@
 from django.shortcuts import render,HttpResponse,redirect
+from django.http import JsonResponse
+
 from user.models import Profile
 from .models import Block,Link
+from .design import Theme
 
-from django.http import JsonResponse
+
 
 from .forms import AvatarForm
 
@@ -12,8 +15,6 @@ def home(request):
     c['profile']=profile
     c['blocks']=profile.block.all()
 
-
-
     return render(request,'app/home.html',c)
 
 def design(request):
@@ -21,6 +22,7 @@ def design(request):
     profile=Profile.objects.get(user=request.user)
     c['profile']=profile
     c['avatar_form']=AvatarForm()
+    c['themes']=Theme.objects.all()
     
     if request.POST.get("form_type") == 'avatar-form':
         form=AvatarForm(request.POST or None,request.FILES or None)
@@ -103,15 +105,15 @@ def add_link(request):
     block.save()
     profile.block.add(block)
 
-    return render(request,'app/partials/blocks.html',{'blocks':profile.block.all()})
+    return render(request,'app/links/blocks.html',{'blocks':profile.block.all()})
 
 def delete_block(request,uid):
     profile=Profile.objects.get(user=request.user)
     Block.objects.get(uid=uid).delete()
     blocks=profile.block.all()
-    return render(request,'app/partials/blocks.html',{'blocks':blocks})
+    return render(request,'app/links/blocks.html',{'blocks':blocks})
 
 def delete_all(request):
     profile=Profile.objects.get(user=request.user)
     profile.block.all().delete()
-    return render(request,'app/partials/blocks.html',{'blocks':None})
+    return render(request,'app/links/blocks.html',{'blocks':None})
