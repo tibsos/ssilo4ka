@@ -1,50 +1,137 @@
+{%load static%}
 <!DOCTYPE html>
 <html>
 
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        
+        <link rel="stylesheet" href="{%static 'css/auth/register.css'%}"/>
 
     </head>
 
     <body>
-        <div class="form-wrapper">
-            <div class="form">
-                <form method="POST">
-                    {%csrf_token%}
-                    <div class="firstForm" id="firstForm">
-                        <input name='username' id="username" placeholder="ник" value="{{username}}">
-                        <p id="usernameErrors"></p>
-                        <input name='email' id="email" placeholder="Электронная почта">
-                        <p id="emailErrors"></p>
-                        <button type="button" id="nextButton" onClick="nextForm()">Continue</button>
+        <div class="registration">
+
+            <div class="procedure">
+                <a href="{%url 'base:landing'%}" class="logo"><h1 class="text">Ссылочка</h1></a>
+
+                
+            
+                <div class="form-wrapper">
+                    <h1 class="headline">Создай свой профиль</h1>
+                    <h4 class="desc">Придумай себе ник. <br>Ты всегда можешь поменять его позже.</h4>
+                    <div class="form">
+                        <form method="POST">
+                            {%csrf_token%}
+                            <div class="firstForm" id="firstForm">
+                                <div class="field" id="usernameField">
+                                    <h1 class="domain">ssilo4ka.ru/</h1>
+                                    <input class="username" name='username' id="username" placeholder="ник" value="{{username}}" autocomplete="off" autofocus>
+                                </div>
+                                <div id="usernameErrors" class="errors"></div>
+                                
+                                <div class="field" id="emailField">
+                                    <label class="email-label" id="email-label" style="cursor:auto;">Электронная почта</label>
+                                    <input class="email" name='email' id="email">
+                                    <svg style="display:none;" id="emailSVG" width="22px" height="22px" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="circleOkIconTitle" stroke="green" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"> <title id="circleOkIconTitle">OK</title> <polyline points="7 13 10 16 17 9"/> <circle cx="12" cy="12" r="10"/> </svg>
+                                </div>
+                                <div id="emailErrors" class="errors"></div>
+                                <p class="agreement">
+                                    Нажимая на кнопку "Создать профиль", ты соглашаешься с нашими <a href="#">Условиями и Положениями</a>, и подтверждаешь, что ознакомился с нашей <a href="#">Политикой Конфиденциальности</a>.</p>
+                                </p>
+                                <button class="btn-inactive" type="button" id="nextButton" onClick="nextForm()" disabled>Создать профиль</button>
+                            </div>
+                            <div class="secondForm" id="secondForm" style="display:none;">
+                                <button id="previousButton" onClick="previousForm()">Back</button>
+                                <div>
+                                    <input type='password' name="password1" id="password" placeholder="Пароль">
+                                    <button type="button" id="showPword">Show Password</button>
+                                </div>
+                                <p id="passwordErrors"></p>
+                                    <button type="submit">Создать профиль</button>
+                                </div>
+                            </form>
+                            
+                            <a href="{%url 'user:register'%}" class="has-profile"><p>У тебя уже есть профиль?</p></a>
                     </div>
-                    <div class="secondForm" id="secondForm" style="display:none;">
-                        <button id="previousButton" onClick="previousForm()">Back</button>
-                        <div>
-                            <input type='password' name="password1" id="password" placeholder="Пароль">
-                            <button type="button" id="showPword">Show Password</button>
-                        </div>
-                        <p id="passwordErrors"></p>
-                        <button type="submit">Register</button>
-                    </div>
-                </form>
+                </div>
+            </div>
+            <div class="image-wrapper">
+                <img src="{%static 'pics/auth/register.png'%}" class='image' alt="Ссылочка Регистрация"/>
             </div>
         </div>
-        <script>
 
+           <!--  <source src="audio/my_song.ogg" type="audio/ogg"> -->
+           <audio id="success" src="{%static 'sounds/success.mp3'%}"></audio>
+            
+
+        {%if username%}
+        <script>
             $(document).ready(function(){
                 validateUsername();
+                $(".my_audio").trigger('load');
+                $(".my_audio").trigger('play');
+                $(function() {
+                    var username = $("#username");
+                    var len = username.val().length;
+                    username[0].focus();
+                    username[0].setSelectionRange(len, len);
+                    });
             });
-
+        </script>
+        {%endif%}
+        <script>
             var pwordVisible=false;
+            emailLabel=document.getElementById('email-label');
+            $('#username').on('focus',function(){
+                document.getElementById('usernameField').classList.add('editing');
+                
+            })
+            $('#username').keyup(function(){
+                document.getElementById('usernameField').classList.remove('valid');
+                document.getElementById('usernameField').classList.remove('invalid');
+                document.getElementById('usernameField').classList.add('editing');
+                usernameErrors=document.getElementById('usernameErrors');
+                usernameErrors.innerText='';
+                usernameErrors.padding=0;
+            });
+            $('#username').on('focusout',function(){
+                validateUsername();
+            });
+            
+            $('#email-label').click(function(){
+                $('#email').focus();
+            });
+            $('#email').on('focus',function(){
+                document.getElementById('emailField').classList.add('editing');
+                if (document.getElementById('email').value.length===0){
+                    emailLabel.style.top = "3px";
+                    emailLabel.style.left = "15px";
+                    emailLabel.style.fontSize = "11px";
+                }
+            })
+            $('#email').keyup(function(){
+                emailField=document.getElementById('emailField');
+                emailField.classList.remove('valid');
+                emailField.classList.remove('invalid');
+                emailField.classList.add('editing');
+                emailErrors=document.getElementById('emailErrors');
+                emailErrors.innerText='';
+                emailErrors.padding=0;
+            });
+            $('#email').on('focusout',function(){
+                validateEmail();
+                if (document.getElementById('email').value.length===0){
+                    emailLabel.style='cursor:auto;';
+                }
+            });
+            
 
             function delay(fn, ms) {
-            let timer = 0
-            return function(...args) {
-                clearTimeout(timer)
-                timer = setTimeout(fn.bind(this, ...args), ms || 0)
-            }
+                let timer = 0
+                return function(...args) {
+                    clearTimeout(timer)
+                    timer = setTimeout(fn.bind(this, ...args), ms || 0)
+                }
             }
 
             $('#username').keyup(delay(function(e){
@@ -59,6 +146,7 @@
                 validatePassword();
             },750));
         
+            pwordVisible=false;
             $('#showPword').on('click',function(){
                 if(pwordVisible===false){
                     document.getElementById('password').type='text';
@@ -70,11 +158,33 @@
                 }
             });
 
-            var usernameLength,usernameDigit;
+            var usernameUnique=false;
+            var usernameLength=false;
+            var usernameValid=false;
             function validateUsername(){
                 username=document.getElementById('username').value;
-                if (username.length<4){
-                    document.getElementById('usernameErrors').innerText='>3 letters';
+                if (username===''){
+                    document.getElementById('usernameErrors').innerText='Пожалуйста, введи свой ник :)';
+                    usernameLength=false;
+                }
+                else if (username.length<3){
+                        document.getElementById('usernameErrors').innerText='Ник должен состоять как минимум из 3 символов.';
+                        usernameLength=false;
+                    }
+                else if(/^[\u0400-\u04FF]+$/.test(username)===true){
+                    document.getElementById('usernameErrors').innerText='Ник может состоять только из латинских букв.';
+                    usernameLength=false;
+                }
+                else if(/[^A-Za-z0-9._]/.test(username)===true){
+                    document.getElementById('usernameErrors').innerText='Ник может состоять только из латинских букв, цифр, подчеркиваний («_») и точек («.»).';
+                    usernameLength=false;
+                }
+                else if(username.length>30){
+                    document.getElementById('usernameErrors').innerText='Ник должен состоять не более чем из 30 символов.';
+                    usernameLength=false;
+                }
+                else if((username.charAt(0)==='.') || (username.charAt(username.length-1)==='.')){
+                    document.getElementById('usernameErrors').innerText='Ник не может начинаться или заканчиваться точкой.';
                     usernameLength=false;
                 }
                 else{
@@ -90,39 +200,102 @@
                         method:'POST',
                         success:function(response, status, XHR){
                             var result = response['response'];
-                            document.getElementById('usernameErrors').innerText=result;
-                            document.getElementById('registerButton').className='yes'
+                            if (result==''){
+                                usernameErrors=document.getElementById('usernameErrors');
+                                usernameErrors.innerText=""
+                                usernameErrors.style.padding=0;
+                                document.getElementById('usernameField').classList.remove('invalid');
+                                document.getElementById('usernameField').classList.add('valid');
+                                usernameUnique=true;
+                                usernameValid=true;
+                                if (usernameValid===true){
+                                    document.getElementById('success').play();
+                                }                       
+                            }
+                            else{
+                                document.getElementById('usernameField').classList.remove('valid');
+                                document.getElementById('usernameField').classList.add('invalid');
+                                document.getElementById('usernameErrors').innerText=result;
+                                usernameUnique=false;
+                                usernameValid=false;
+                            }
                         }
                     });
                 }
+                if(usernameValid===false || usernameUnique===false  ){
+                    document.getElementById('usernameField').classList.remove('valid');
+                    document.getElementById('usernameField').classList.add('invalid');
+                    usernameErrors=document.getElementById('usernameErrors');
+                    usernameErrors.style.paddingBottom='10px';
+                    usernameErrors.style.paddingLeft='10px';
+                }
+                if (usernameValid===true && usernameUnique===true && emailValid===true){
+                    document.getElementById('nextButton').disabled=false;
+                }
+                else{
+                    document.getElementById('nextButton').disabled=true;
+                }
             }
             
-            var emailValid;
+            
             function validateEmail(){
-                email=document.getElementById('email').value;
-                if(isNaN(email.charAt(0))===true) {
-                    if(email.length>6){
-                        if(email.includes('@')===true){
-                            afterAt=email.split('@')[1];
-                            domain=afterAt.split('.')[0];
-                            domainLength=domain.length;
-                            if((domainLength>2) && (domainLength<64)){
-                                afterAtProcessed=afterAt.slice(1,afterAt.length);
-                                if((afterAtProcessed.match(/\./g)).length===1){
-                                    domainIdentifier=afterAt.split('.')[1];
-                                    if(domainIdentifier.length>1){
-
+                emailElement=document.getElementById('email');
+                email=emailElement.value;
+                emailErrors=document.getElementById('emailErrors');
+                emailField=document.getElementById('emailField')
+                if (email===''){
+                    emailValid=false;
+                }
+                else{
+                    if(isNaN(email.charAt(0))===true) {
+                        if(email.length>6){
+                            if(email.includes('@')===true){
+                                afterAt=email.split('@')[1];
+                                domain=afterAt.split('.')[0];
+                                domainLength=domain.length;
+                                if((domainLength>2) && (domainLength<64)){
+                                    afterAtProcessed=afterAt.slice(1,afterAt.length);
+                                    if((afterAtProcessed.match(/\./g)).length===1){
+                                        domainIdentifier=afterAt.split('.')[1];
+                                        if(domainIdentifier.length>1){
+                                            if (emailValid!==true){
+                                            emailValid=true;
+                                            /* Check if a user with this email alrd exists */
+                                            emailField.classList.add("valid");
+                                            emailErrors.innerText='';
+                                            emailErrors.padding=0;
+                                            document.getElementById('emailSVG').style='position:absolute; right:20px;top:15px;'
+                                            document.getElementById('success').play();
+                                        }
+                                            
+                                        }
                                     }
                                 }
                             }
-                                
                         }
+                        
                     }
-                }  
-                else{
-                    emailValid=false;
+                    else{
+                        emailValid=false;
+                    }
                 }
-            }
+                    if(emailValid===false){
+                        emailField.classList.remove('valid');
+                        emailField.classList.add('invalid');
+                        document.getElementById('emailSVG').style='display:none;'
+                        emailErrors.innerText='Пожалуйста, введи корректный электронный адрес :)';
+                        emailErrors.padding=0;
+                    }
+                }
+                    
+                
+                if (usernameValid===true && usernameUnique===true && emailValid===true){
+                    document.getElementById('nextButton').disabled=false;
+                }
+                else{
+                    document.getElementById('nextButton').disabled=true;
+                }
+
 
             var passwordLength, passwordDigit;
             function validatePassword(){

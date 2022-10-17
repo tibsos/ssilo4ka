@@ -3,7 +3,11 @@ def landing(request):
 
     if request.method=='POST':
         username=request.POST.get('username')
-        return redirect('user:landing-register',username=username)
-
+        if username=='':
+            pass
+            return redirect('user:register')
+            
+        else:
+            return redirect('user:landing-register',username=username)
     return render(request,'landing.html')
 

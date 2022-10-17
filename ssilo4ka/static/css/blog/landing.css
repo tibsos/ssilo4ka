@@ -1,0 +1,79 @@
+@font-face{
+    font-family:'comfortaa';
+    src: url('/static/fonts/Comfortaa-VariableFont_wght.ttf')
+}
+
+@font-face {
+    font-family: 'yeseva1';
+    src: url('/static/fonts/YesevaOne-Regular.ttf') format('truetype');/* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+    /* url('myfont.woff') format('woff'), */ /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}  
+
+body{
+    font-family:yeseva1;
+    background-color: #F3F3F1;
+}
+
+
+.top-nav{
+    font-family:comfortaa;
+    background-color: black;
+    width:95%;
+    height:85px;
+    border-radius:120px;
+
+    top:50px;
+    position:fixed;
+    left:2.5%;
+
+    z-index:2;
+
+    display:flex;
+
+}
+
+.top-nav .logo{
+    font-size:28px;
+    margin-bottom:1px;
+    margin-left:50px;
+    
+}
+
+.top-nav .links{
+    margin-left:50px;
+    
+}
+
+.top-nav ul{
+    list-style-type:none;
+    margin:0;
+    padding:0;
+    overflow:0;
+    margin-top: 35px;
+}
+
+.top-nav li{
+    color:white;
+    font-size:17px;
+    float:left;
+    margin-left:40px; 
+}
+
+.top-nav .logo a{
+    text-decoration: none;
+    font-weight:bold;
+}
+
+.top-nav .links a{
+    text-decoration: none;
+}
+
+.headline{
+    font-size:100px;
+    text-align: center;
+    margin-top:330px;
+    margin-bottom: 50px;
+    color:#1F2433;
+}
+
+

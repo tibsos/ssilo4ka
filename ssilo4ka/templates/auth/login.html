@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        
+    </head>
+
+    <body>
+        <div class="login">
+            <div class="procedure">
+                <a href="{%url 'base:landing'%}" class="logo"><h1 class="text">Ссылочка</h1></a>
+            
+            <div class="form-wrapper">
+                <h1 class="hedaline">
+                    Зайди в свою ссылочку
+                </h1>
+                <form method="POST">
+                    {%csrf_token%}
+                    <div class="form" id="form">
+
+                        <div class="field" id="usernameField">
+                            <h1 class="domain">ssilo4ka.ru/</h1>
+                            <input class="username" name='username' id="username" placeholder="ник" value="{{username}}" autocomplete="off" autofocus>
+                            <svg style="display:none;" id="usernameSVG" width="22px" height="22px" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="circleOkIconTitle" stroke="green" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"> <title id="circleOkIconTitle">OK</title> <polyline points="7 13 10 16 17 9"/> <circle cx="12" cy="12" r="10"/> </svg>
+                        </div>
+                        <div id="usernameErrors" class="errors"></div>
+                        
+                        
+                        <div class="field" id="pwordField">
+                            <label id="passwordLabel" class="password-label"></label>
+                            <input type='password' name="password" id="pword">
+                            <button type="button" id="showPword">Show Password</button>
+                            <svg style="display:none;" id="pwordSVG" width="22px" height="22px" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="circleOkIconTitle" stroke="green" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"> <title id="circleOkIconTitle">OK</title> <polyline points="7 13 10 16 17 9"/> <circle cx="12" cy="12" r="10"/> </svg>
+                        </div>
+                        <div id="pwordErrors" class="errors"></div>
+                            <button type="submit">Войти</button>
+                        </div>
+                        <a href="{%url 'user:password-reset'%}" class="forgot-pword">Забыли пароль?</a>
+                        <p>Нету аккаунта?<a href="{% url 'user:register'%}">Создай его</a></p>
+                    </form>
+
+            </div>
+            
+            </div>
+
+            <div class="image-wrapper">
+
+
+            </div>
+
+        </div>
+    </body>
+
+    <script>
+    
+    </script>
+
+</html>
