@@ -1,0 +1,61 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Аналитика</title>
+        <link rel="stylesheet" href="{%static 'css/app/analytics.css'%}">
+        <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+
+    <body>  
+        <div class="all">
+            <div class="lifetime">
+                <h1>Аналитика за все время</h1>
+                <ul>
+                    <li>
+                        <div style="background-color:green;"></div>
+                        <label>Просмотры</label>
+                        <p>{{profile.analytics.views}}</p>
+                    </li>
+                    <li>
+                        <div style="background-color:blue;"></div>
+                        <label>Клики</label>
+                        <p>{{profile.analytics.clicks}}</p>
+                    </li>
+                    <li>
+                        <div style="background-color:red;"></div>
+                        <label>CTR</label>
+                        <p>{{profile.analytics.ctr}}</p>
+                    </li>
+                    <li>
+                        <div style="background-color:grey;"></div>
+                        <label>Проведенное время на странице</label>
+                        <p>{{profile.analytics.time_spent}}</p>
+                    </li>
+                    <li>
+                        <div style="background-color:grey;"></div>
+                        <label>Среднее проведенное время на странице</label>
+                        <p>{{profile.analytics.avrg_time_spent}}</p>
+                    </li>
+                    <li>
+                        <div style="background-color:grey;"></div>
+                        <label>Среднее время проведенное на странице до клика</label>
+                        <p>{{profile.analytics.avrg_time_2click}}</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </body>
+    <style>
+        html{
+            font-weight:100;
+        }
+    </style>
+
+    <script>
+    
+    </script>
+
+</html>

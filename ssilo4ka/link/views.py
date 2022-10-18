@@ -5,9 +5,13 @@ from user.models import Profile
 from .models import Block,Link
 from .design import Theme
 
-
-
 from .forms import AvatarForm
+
+def ssilo4ka(request):
+    c={}
+    #username
+    #profile
+    return render(request,'ssilo4ka.html',c)
 
 def home(request):
     c={}

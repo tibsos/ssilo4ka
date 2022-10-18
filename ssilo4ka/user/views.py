@@ -27,6 +27,7 @@ def register(request):
             user.profile.email=rp.get('email')
             user.save()
             user.refresh_from_db()
+            user.profile.analytics=a
             user=authenticate(username=rp.get('username'),password=password)
             login(request,user)
             return redirect('user:profile-creation')
