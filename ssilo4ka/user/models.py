@@ -74,6 +74,8 @@ class Profile(m.Model):
         return self.name or self.user.username or None
     class Meta:
         ordering=['name']
+    def get_absolute_url(self):
+        return f'ssilo4ka.ru/{self.user.username}'
 
 @receiver(post_save,sender=User)
 def update_profile_signal(sender,instance,created,**kwargs):

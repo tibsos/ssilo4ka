@@ -4,6 +4,8 @@ from .views import *
 app_name='link'
 
 urlpatterns=[
+    path('<str:username>/',ssilo4ka,name='ssilo4ka'),
+
     path('home/',home,name='home'),
     path('design/',design,name='design'),
     path('analytics/',analytics,name='analytics'),

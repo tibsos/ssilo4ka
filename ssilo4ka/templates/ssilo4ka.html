@@ -1,0 +1,81 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>{{profile.user.username}} | Twitter, Instagram, YouTube, Spotify, TikTok | Ссылочка</title>
+        <link rel="stylesheet" href="{%static 'css/ssilo4ka.css'%}">
+        <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <div class="profile">
+
+            <!-- Share function -->
+            <div class="top-nav">
+                <div class="avatar">
+
+                </div>
+                <div class="username">
+
+                </div>
+                <button class="share" id="share">
+                    
+                    <svg class='button' width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 11V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V11M12 3L12 15M12 3L16 7M12 3L8 7" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <div style="color:transparent">
+                        <div class="link">
+                            {{profile.get_absolute_url}}
+                        </div>
+                    </div>
+                </button>
+            </div>
+                
+            <!-- Avatar -->
+            {%if profile.avatar%}
+            <div class="avatar">
+                <img src="profile.avatar.url" alt="{{profile.user.username}} аватар">
+            </div>
+            {%else%}
+                <div class="circle">
+                    {%if profile.title%}
+                        <p>{{profile.title|capfirst}}</p>
+                    {%else%}
+                        <p>{{profile.user.username|capfirst}}</p>
+                    {%endif%}
+                </div>
+            {%endif%}
+
+            <!-- Title -->
+            {%if profile.title%}
+                <h1 class="title">{{profile.title}}</h1>
+            {%else%}
+                <h1 class="title">@{{profile.user.username}}</h1>
+            {%endif%}
+            
+            <!-- Ssilo4ka logo -->
+            <div class='logo'>
+                <a href="{%url 'base:landing'%}">Ссылочка</a>
+            </div>
+
+        </div>
+    </body>
+
+    <script>
+
+    /* Copy profile url to clipboard */
+    $('#share').on('click',function(){
+        var range = document.createRange();
+        range.selectNode(document.getElementById('share'));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();
+    });
+    
+
+    </script>
+
+</html>
