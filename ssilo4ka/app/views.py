@@ -1,16 +1,18 @@
-from django.shortcuts import render,HttpResponse,redirect
+from django.shortcuts import render,HttpResponse,redirect,get_object_or_404
 from django.http import JsonResponse
 
+from django.contrib.auth.models import User
 from user.models import Profile
 from .models import Block,Link
 from .design import Theme
 
 from .forms import AvatarForm
 
-def ssilo4ka(request):
+def ssilo4ka(request,username):
     c={}
-    #username
-    #profile
+    user=get_object_or_404(User,username=username)
+    profile=user.profile
+    c['profile']=profile
     return render(request,'ssilo4ka.html',c)
 
 # Links

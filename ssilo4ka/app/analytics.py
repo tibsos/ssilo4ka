@@ -11,8 +11,8 @@ class PageStatistics(m.Model):
     class Meta:
         verbose_name='Статистика ссылочки'
         verbose_name_plural='Статистика ссылочек'
-        class Meta:
-            ordering=['total_views']
+    class Meta:
+        ordering=['total_views']
 
     @property
     def ctr(self):

@@ -14,6 +14,6 @@ a.site.register(Font)
 # Activity
 a.site.register(PageStatistics)
 a.site.register(PageActivity)
-a.site.register(BlockActivity)
+a.site.register(LinkActivity)
 a.site.register(ProfileActivity)
 a.site.register(Activity)
