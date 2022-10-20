@@ -13,6 +13,8 @@ def ssilo4ka(request):
     #profile
     return render(request,'ssilo4ka.html',c)
 
+# Links
+
 def home(request):
     c={}
     profile=Profile.objects.get(user=request.user)
@@ -20,48 +22,6 @@ def home(request):
     c['blocks']=profile.block.all()
 
     return render(request,'app/home.html',c)
-
-def design(request):
-    c={}
-    profile=Profile.objects.get(user=request.user)
-    c['profile']=profile
-    c['avatar_form']=AvatarForm()
-    c['themes']=Theme.objects.all()
-    
-    if request.POST.get("form_type") == 'avatar-form':
-        form=AvatarForm(request.POST or None,request.FILES or None)
-        if form.is_valid():
-            profile.avatar=form.cleaned_data['avatar']
-            profile.save()
-        else:
-            formats=[]
-            print("У вашей картинки недопустимый формат :c \n Пожалуйста, загрузите картинку с одним из нижеперечисленных форматом =)")
-    else:
-        form=AvatarForm()
-            
-
-
-    return render(request,'app/design/design.html',c)
-
-
-def analytics(request):
-    c={}
-    profile=Profile.objects.get(user=request.user)
-    c['profile']=profile
-    return render(request,'app/analytics.html',c)
-
-def settings(request):
-    c={}
-    profile=Profile.objects.get(user=request.user)
-    c['profile']=profile
-    return render(request,'app/settings.html',c)
-
-def upgrade(request):
-    c={}
-    profile=Profile.objects.get(user=request.user)
-    c['profile']=profile
-    return render(request,'app/upgrade.html',c)
-
 
 # django forms
 
@@ -96,9 +56,7 @@ def update_url(request):
     block.link.save()
     return HttpResponse("OK")
 
-
 # htmx
-
 
 def add_link(request):
     rp=request.POST
@@ -121,3 +79,39 @@ def delete_all(request):
     profile=Profile.objects.get(user=request.user)
     profile.block.all().delete()
     return render(request,'app/links/blocks.html',{'blocks':None})
+
+
+# Design 
+
+def design(request):
+    c={}
+    profile=Profile.objects.get(user=request.user)
+    c['profile']=profile
+    c['avatar_form']=AvatarForm()
+    c['themes']=Theme.objects.all()
+    
+    if request.POST.get("form_type") == 'avatar-form':
+        form=AvatarForm(request.POST or None,request.FILES or None)
+        if form.is_valid():
+            profile.avatar=form.cleaned_data['avatar']
+            profile.save()
+            return JsonResponse({'response':'OK'})
+        else:
+            formats=[]
+            return JsonResponse({'response':'У вашей картинки недопустимый формат :( \n Пожалуйста, загрузите картинку с одним из нижеперечисленных форматом =)','formats':', '.join(formats)})
+
+    return render(request,'app/design/design.html',c)
+
+
+def analytics(request):
+    c={}
+    profile=Profile.objects.get(user=request.user)
+    c['profile']=profile
+    return render(request,'app/analytics.html',c)
+
+
+def account(request):
+    c={}
+    profile=Profile.objects.get(user=request.user)
+    c['profile']=profile
+    return render(request,'app/account.html',c)

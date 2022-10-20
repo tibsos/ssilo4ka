@@ -1,12 +1,14 @@
 from django.db import models as m
 from uuid import uuid4 as u4
 
-from link.analytics import BlockActivity
+from app.analytics import LinkActivity
 
 class Link(m.Model):
     block=m.ForeignKey('Block',on_delete=m.CASCADE,related_name='link_block')
     title=m.CharField(max_length=50,blank=True,null=True)
     url=m.CharField(max_length=3000,blank=True,null=True)
+    activity=m.ManyToManyField(LinkActivity,blank=True)
+
     def __str__(self):
         return self.title or "undefined"
 
@@ -33,14 +35,16 @@ class Block(m.Model):
     )
 
     uid=m.UUIDField(default=u4)
-    blockType=m.CharField(max_length=20,choices=BLOCK_TYPE,default='link')
+
     active=m.BooleanField(default=True)
+
+    blockType=m.CharField(max_length=20,choices=BLOCK_TYPE,default='link')
     link=m.ForeignKey(Link,on_delete=m.DO_NOTHING,blank=True,null=True,related_name="blocks_link")
-    activity=m.ManyToManyField(BlockActivity,blank=True)
+
     createdAt=m.DateTimeField(auto_now_add=True)
     updatedAt=m.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.blockType or None
+        return self.blockType
     class Meta:
         ordering=['updatedAt']

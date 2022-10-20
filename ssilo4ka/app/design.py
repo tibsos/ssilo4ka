@@ -1,21 +1,23 @@
 from django.db import models as m
 import os
 from uuid import uuid4 as u4
-def up(instance,filename):
-    e=filename.split('.')[-1]
-    s="%s.%s"%(u4,e)
-    return os.path.join('design/preview/',s)
-def ui(instance,filename):
-    e=filename.split('.')[-1]
-    s="%s.%s"%(u4,e)
-    return os.path.join('design/background/image',s)
+
+# Uploads
+def upload_background_image(instance,filename):
+    file_extension=filename.split('.')[-1]
+    file_name="%s.%s"%(u4,file_extension)
+    return os.path.join('design/background/image',file_name)
+
+def upload_background_video(instance,filename):
+    file_extension=filename.split('.')[-1]
+    file_name="%s.%s"%(u4,file_extension)
+    return os.path.join('design/background/video',file_name)
 
 class Theme(m.Model):
     uid=m.UUIDField(default=u4)
     title=m.CharField(max_length=20)
     premium=m.BooleanField(default=False)
     order=m.PositiveSmallIntegerField()
-    preview=m.ImageField(upload_to=up)
     background=m.ForeignKey('Background',on_delete=m.DO_NOTHING,blank=True,null=True)
     backgroundColor=m.CharField(max_length=10,blank=True,null=True)
     backgroundGradient=m.TextField(max_length=100,blank=True,null=True)
@@ -28,12 +30,11 @@ class Theme(m.Model):
         ordering=['order']
 
 
-
 class Background(m.Model):
     uid=m.UUIDField(default=u4)
     title=m.CharField(max_length=20)
-    image=m.ImageField(upload_to=ui,blank=True,null=True)
-
+    image=m.ImageField(upload_to=upload_background_image,blank=True,null=True)
+    video=m.ImageField(upload_to=upload_background_video,blank=True,null=True)
 
     def __str__(self):
         return self.title

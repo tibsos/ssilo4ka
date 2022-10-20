@@ -6,5 +6,3 @@ class AvatarForm(f.ModelForm):
     class Meta:
         model=Profile
         fields=('avatar',)
-            
-    

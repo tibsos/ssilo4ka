@@ -12,5 +12,6 @@ urlpatterns=[
     path('login/',log_in,name='login'),
     path('password-reset/',password_reset,name='password-reset'),
     path('logout/',logout,name='logout'),
-    path('',include('link.urls')),
+    
+    path('',include('app.urls')),
 ]

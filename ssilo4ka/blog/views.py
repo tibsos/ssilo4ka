@@ -1,13 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render as r
 
-def landing(request):
+def l(request):
     c={}
-    return render(request,'blog/landing.html',c)
+    return r(request,'b/l.html',c)
 
-def category(request,categorySlug):
+def c(request,categorySlug):
     c={}
-    return render(request,'blog/category.html',c)
+    return r(request,'blog/category.html',c)
 
-def post(request,postSlug):
+def p(request,postSlug):
     c={}
-    return render(request,'blog/posts/post.html',c)
+    return r(request,'blog/posts/post.html',c)

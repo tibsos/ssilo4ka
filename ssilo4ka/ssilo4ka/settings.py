@@ -18,11 +18,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'base',
-    
+    'billing',
+    'help',
     'blog',
-
+    #'terms,'
+    
     'user',
-    'link',
+    'app',
 ]
 
 MIDDLEWARE = [
@@ -38,7 +40,13 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [
+            'templates',
+
+            'base',
+            'link',
+            ''
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

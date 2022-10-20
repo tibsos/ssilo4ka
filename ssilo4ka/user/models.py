@@ -8,9 +8,9 @@ from django.db.models.signals import post_save
 
 from uuid import uuid4 as u4
 
-from link.models import Block
-from link.design import Theme,Background,Button,Font
-from link.analytics import PageStatistics,PageActivity,ProfileActivity
+from app.models import Block
+from app.design import Theme,Background,Button,Font
+from app.analytics import PageStatistics,PageActivity,ProfileActivity
 
 def ua(instance,filename):
     e=filename.split('.')[-1]

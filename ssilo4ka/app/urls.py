@@ -1,18 +1,17 @@
 from django.urls import path
 from .views import *
 
-app_name='link'
+app_name='app'
 
 urlpatterns=[
     path('home/',home,name='home'),
     path('design/',design,name='design'),
     path('analytics/',analytics,name='analytics'),
-    path('settings/',settings,name='settings'),
-
-    path('upgrade/select-plan',upgrade,name='upgrade'),
+    #path('SEO/',seo,name='seo'),
+    #path('social-icons/',social_icons,name='social-icons'),
+    path('my-account/',account,name='account'),
 
     #path('my-account/',my_account,name='my-account'),
-    #path('billing/',billing,name='billing'),
     #path('settings/',settings,name='settings'),
     #path('help/',help,name='help'),
 ]
@@ -27,8 +26,9 @@ ajax_urlpatterns=[
 htmx_urlpatterns=[
     # links
     path('add-link/',add_link,name='add-link'),
-    path('delete-all/',delete_all,name='delete-all'),
     path('delete-block/<uuid:uid>/',delete_block,name='delete-block'),
+    path('delete-all/',delete_all,name='delete-all'),
 ]
+
 urlpatterns+=ajax_urlpatterns
 urlpatterns+=htmx_urlpatterns

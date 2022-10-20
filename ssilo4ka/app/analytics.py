@@ -1,18 +1,19 @@
 from django.db import models as m
 from django.utils.translation import gettext_lazy as _
 
-
 class PageStatistics(m.Model):
     total_views=m.PositiveIntegerField(_("Всего просмотров страницы"),default=0)
-    total_clicks=m.PositiveIntegerField(_("Всего кликов"),default=0)
-    total_time_spent=m.PositiveIntegerField(_("Время проведнееое на странице [s]"),default=0)
-    average_time_spent=m.PositiveIntegerField(_("Среднее проведенное время [с]"),default=0)
+    total_clicks=m.PositiveIntegerField(_("Всего кликов по кнопкам"),default=0)
+    total_time_spent=m.PositiveIntegerField(_("Время проведнное на странице [с]"),default=0)
+    average_time=m.PositiveIntegerField(_("Среднее проведенное время на странице [с]"),default=0)
     average_time_2click=m.PositiveIntegerField(_("Среднее проведенное время до клика на кнопку [с]"),default=0)
-    def get_ctr(self):
-        return 
+
     class Meta:
-        verbose_name='Статистика ссылочек'
-        verbose_name_plural='Статистика ссылочки'
+        verbose_name='Статистика ссылочки'
+        verbose_name_plural='Статистика ссылочек'
+        class Meta:
+            ordering=['total_views']
+
     @property
     def ctr(self):
         clicks=self.total_clicks
@@ -23,6 +24,7 @@ class PageStatistics(m.Model):
             return '0%'
         else:
             return '-'
+
     @property
     def views(self):
         views=self.total_views
@@ -32,6 +34,7 @@ class PageStatistics(m.Model):
             return str(round(views/1000,ndigits=2))+'K'
         if views>1000000:
             return str(round(views/1000000,ndigits=2))+'M'
+
     @property
     def clicks(self):
         clicks=self.total_clicks
@@ -41,6 +44,7 @@ class PageStatistics(m.Model):
             return str(round(clicks/1000,ndigits=2))+'K'
         if clicks>1000000:
             return str(round(clicks/1000000,ndigits=2))+'M'
+
     @property
     def time_spent(self):
         seconds=self.total_time_spent  
@@ -68,6 +72,7 @@ class PageStatistics(m.Model):
                 return (str(hours)+'ч')
         else:
             return ('0с')
+
     @property
     def avrg_time_spent(self):
         seconds=self.average_time_spent
@@ -95,6 +100,7 @@ class PageStatistics(m.Model):
                 return (str(hours)+'ч')
         else:
             return ('0с')
+
     @property
     def avrg_time_2click(self):
         seconds=self.average_time_2click
@@ -129,10 +135,10 @@ class PageActivity(m.Model):
     referral=m.CharField(max_length=10,blank=True,null=True)
     visited_at=m.DateTimeField(_("Момент визита"),auto_now_add=True)
     class Meta:
-        verbose_name_plural='Активность страницы'
-        verbose_name='Активность страниц'
+        verbose_name='Активность на ссылочке'
+        verbose_name_plural='Активность на ссылочках'
 
-class BlockActivity(m.Model):
+class LinkActivity(m.Model):
     ip_address=m.CharField(max_length=20,blank=True,null=True)
     time_2click=m.PositiveIntegerField(_("Время проведенное до клика на кнопку [s]"),)
     clicked_at=m.DateTimeField(_("Момент нажатия"),auto_now_add=True)
@@ -141,7 +147,6 @@ class BlockActivity(m.Model):
         verbose_name_plural='Активность блоков'
 
 class ProfileActivity(m.Model):
-    
     page=m.CharField(max_length=100)
     next_page=m.CharField(max_length=100)
     referral=m.CharField(max_length=10,blank=True,null=True)
@@ -153,8 +158,8 @@ class ProfileActivity(m.Model):
         verbose_name_plural='Активность Профилей'
             
 class Activity(m.Model):
-
     ip_address=m.CharField(max_length=20,blank=True,null=True)
+    page=m.CharField(max_length=20)
     referral=m.CharField(max_length=10,blank=True,null=True)
     visit_duration=m.PositiveIntegerField()
     visited_at=m.DateTimeField(auto_now_add=True)
