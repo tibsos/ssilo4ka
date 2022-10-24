@@ -1,3 +1,4 @@
+from curses.ascii import HT
 from django.shortcuts import render,HttpResponse,redirect,get_object_or_404
 from django.http import JsonResponse
 
@@ -6,22 +7,41 @@ from user.models import Profile
 from .models import Block,Link
 from .design import Theme
 
-from .forms import AvatarForm
+from .forms import AvatarForm,RedirectDateTimeForm,TimezoneForm
+
+from .features import RedirectLink
+
+from datetime import datetime, timedelta
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
 def ssilo4ka(request,username):
     c={}
     user=get_object_or_404(User,username=username)
     profile=user.profile
     c['profile']=profile
+    if profile.priority_link:
+        return redirect(profile.priority_link.priority.url)
+
     return render(request,'ssilo4ka.html',c)
 
 # Links
 
 def home(request):
-    c={}
+    
     profile=Profile.objects.get(user=request.user)
+
+    c={}
     c['profile']=profile
     c['blocks']=profile.block.all()
+    c['datetime_form']=RedirectDateTimeForm()
+    c['timezone_form']=TimezoneForm()
 
     return render(request,'app/home.html',c)
 
@@ -44,38 +64,132 @@ def block_activity(request):
     else:
         block.active=True
         block.save()
-    return HttpResponse("OK")
+    return HttpResponse("K")
 
 def update_title(request):
     block=Block.objects.get(uid=request.POST.get('uid'))
     block.link.title=request.POST.get('title')
-    #block.link.save()
-    return HttpResponse("OK")
+    block.link.save()
+    return HttpResponse("K")
 
 def update_url(request):
     block=Block.objects.get(uid=request.POST.get('uid'))
-    block.link.url=request.POST.get('url')
-    block.link.save()
-    return HttpResponse("OK")
+    block.url=request.POST.get('url')
+    block.save()
+    return HttpResponse("K")
+
+# json Features
+
+## Redirect feature
+
+def create_redirect_link(request):
+
+    profile=Profile.objects.get(user=request.user)
+    
+    block_uid=request.POST.get('uid')
+    block=Block.objects.get(uid=block_uid)
+    
+    profile.redirect_link=block
+    profile.save()
+
+    time=datetime.today()
+    tomorrow=time+timedelta(hours=24)
+
+    end_date=datetime.strftime(tomorrow,'%Y-%m-%d')
+    end_time=datetime.strftime(tomorrow,'%H:%M')
+
+    redirect_link=RedirectLink.objects.create(end_date=end_date,end_time=end_time,timezone='+3')
+    block.redirect=redirect_link
+    block.save()
+
+    return HttpResponse('K')
+
+def delete_redirect_link(request):
+
+
+
+    return render(JsonResponse({"response":"OK",}))
+
+def update_redirect_link_date(request):
+
+
+
+    return render(JsonResponse({"response":"OK",}))
+
+def redirect_update_time(request):
+
+    profile=Profile.objects.get(user=request.user)
+    redirect_object=profile.redirect_link.redirect
+
+    new_time=request.POST.get('time')
+    processed_time=''
+    timezone=redirect_object.timezone
+    new_time='02:22'
+    timezone='+4'
+    if timezone!='+3':
+
+        timezone_operator=timezone[0]
+        timezone_digit=timezone[1]
+
+        time=new_time.split(':')
+        hours=time[0]
+        minutes=time[1]
+
+        if len(hours)==2 and hours[0]=='0':
+            hours=hours[1]
+
+        if timezone_operator=='-':
+            hours=hours-timezone_digit-3
+            if hours<0:
+                hours=24+hours # calculate new hours
+                # subtract 1 from date
+                #redirect_object.date=
+                new_time=f"{hours}:{minutes}" # see if it needs a 0
+        else: # (+3)
+            if timezone_digit>3:
+                to_add=timezone_digit-3
+                hours=hours+to_add
+                if int(hours)>24:
+                    hours=hours-24
+                    # new_time = 
+            else:
+                to_subtract=3-timezone_digit
+                hours=hours-to_subtract
+                # same logic as in (-) case
+
+    redirect_object.end_time=new_time
+    redirect_object.save()
+
+    # Testing
+    print(new_time)
+    print(redirect_object.end_time)
+
+    return HttpResponse('K')
+
+def update_redirect_link_timezone(request):
+
+
+
+    return render(JsonResponse({"response":"OK",}))
 
 # htmx
 
 def add_link(request):
     rp=request.POST
     profile=Profile.objects.get(user=request.user)
-    block=Block.objects.create()
-    link=Link.objects.create(title='', url='',block=block)
+    block=Block.objects.create(url='')
+    link=Link.objects.create(title='',block=block)
     block.link=link
     block.save()
     profile.block.add(block)
 
     return render(request,'app/links/blocks.html',{'blocks':profile.block.all()})
 
-def delete_block(request,uid):
-    profile=Profile.objects.get(user=request.user)
-    Block.objects.get(uid=uid).delete()
-    blocks=profile.block.all()
-    return render(request,'app/links/blocks.html',{'blocks':blocks})
+def delete_block(request):
+
+    Block.objects.get(uid=request.POST.get('uid')).delete()
+
+    return HttpResponse('K')
 
 def delete_all(request):
     profile=Profile.objects.get(user=request.user)

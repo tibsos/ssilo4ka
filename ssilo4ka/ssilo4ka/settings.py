@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-3g4t0t+(z_!11dh=&vg9r8ygiq1g0n6(a4z_5pv*g1p$5e#i5('
@@ -17,6 +19,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'compressor',
+
     'base',
     'billing',
     'help',
@@ -27,6 +31,9 @@ INSTALLED_APPS = [
     'app',
 ]
 
+
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -36,6 +43,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 TEMPLATES = [
     {
@@ -86,7 +94,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -94,11 +102,19 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATIC_URL = 'static/'
+STATIC_ROOT='static'
+STATIC_URL = '/static/'
+STATICFILES_FINDERS = [
+    'compressor.finders.CompressorFinder'
+]
+
 STATICFILES_DIRS=(
     os.path.join(BASE_DIR,'static'),
 )
 
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)
 
 # Base url to serve media files
 MEDIA_URL = '/media/'

@@ -1,0 +1,67 @@
+@charset "UTF-8";
+/* line 1, c:/users/anna/desktop/рщч/ssilo4ka/4ka/ssilo4ka/static/css/app/nav.css */
+.nav {
+  z-index: 3;
+  position: absolute;
+  top: 20px;
+  left: 5%;
+  width: 90%;
+  height: 55px;
+  background-color: white;
+  border-radius: 50px;
+  font-size: 16px;
+  box-shadow: 2px 2px 5px #666666, -2px -2px 5px #ffffff; }
+
+/* line 22, c:/users/anna/desktop/рщч/ssilo4ka/4ka/ssilo4ka/static/css/app/nav.css */
+.nav div {
+  float: left; }
+
+/* line 26, c:/users/anna/desktop/рщч/ssilo4ka/4ka/ssilo4ka/static/css/app/nav.css */
+.nav a {
+  text-decoration: none; }
+
+/* line 31, c:/users/anna/desktop/рщч/ssilo4ka/4ka/ssilo4ka/static/css/app/nav.css */
+.logo {
+  position: relative;
+  top: 20px;
+  left: 10px;
+  width: 100px; }
+
+/* line 39, c:/users/anna/desktop/рщч/ssilo4ka/4ka/ssilo4ka/static/css/app/nav.css */
+.left ul {
+  position: relative;
+  top: 20px;
+  left: 10px; }
+
+/* line 45, c:/users/anna/desktop/рщч/ssilo4ka/4ka/ssilo4ka/static/css/app/nav.css */
+.right ul {
+  position: absolute;
+  top: 5px;
+  right: 50px; }
+
+/* line 51, c:/users/anna/desktop/рщч/ssilo4ka/4ka/ssilo4ka/static/css/app/nav.css */
+.left ul {
+  position: relative;
+  top: 5px;
+  left: 10px; }
+
+/* line 57, c:/users/anna/desktop/рщч/ssilo4ka/4ka/ssilo4ka/static/css/app/nav.css */
+li {
+  display: inline;
+  margin-right: 20px;
+  padding: 13px;
+  color: darkgrey; }
+
+/* line 64, c:/users/anna/desktop/рщч/ssilo4ka/4ka/ssilo4ka/static/css/app/nav.css */
+.active-link {
+  width: 100%;
+  background-color: grey;
+  border-radius: 50px;
+  color: black; }
+
+/* line 71, c:/users/anna/desktop/рщч/ssilo4ka/4ka/ssilo4ka/static/css/app/nav.css */
+.left li:hover {
+  width: 100%;
+  background-color: grey;
+  border-radius: 50px;
+  color: black; }

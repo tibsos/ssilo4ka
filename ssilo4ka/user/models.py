@@ -58,8 +58,8 @@ class Profile(m.Model):
 
     # Premium
     logoHidden=m.BooleanField(default=False)
-    priorityLink=m.ForeignKey(Block,on_delete=m.DO_NOTHING,blank=True,null=True,related_name='profile_priority_block')
-    redirectLink=m.ForeignKey(Block,on_delete=m.DO_NOTHING,blank=True,null=True,related_name='profile_redirect_block')
+    priority_link=m.ForeignKey(Block,on_delete=m.DO_NOTHING,blank=True,null=True,related_name='profile_priority_block')
+    redirect_link=m.ForeignKey(Block,on_delete=m.DO_NOTHING,blank=True,null=True,related_name='profile_redirect_block')
     
     # Activity
     statistics=m.OneToOneField(PageStatistics,on_delete=m.DO_NOTHING) 
@@ -67,8 +67,8 @@ class Profile(m.Model):
     activity=m.ManyToManyField(PageActivity,blank=True)
 
     # Datetimes
-    createdAt=m.DateTimeField(auto_now_add=True)
-    updatedAt=m.DateTimeField(auto_now=True)
+    created_at=m.DateTimeField(auto_now_add=True)
+    updated_at=m.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name or self.user.username or None

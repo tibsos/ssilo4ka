@@ -1,0 +1,28 @@
+{%for day in days%}
+{{day}}
+{%endfor%}
+
+
+
+<!-- 
+
+    For each content piece from current month
+
+        Find the day which matches its publish date
+
+            Add the content into the day contents (should already be sorted by time)
+            How:
+                Pass the publish day of content as a parameter
+                Find the matching day by id
+                    html=`
+                        <div class="" id="content {{content.uid}}" onClick="getContentDetails(this)">
+                            <div class="{{content.type}}"></div> <!-- Circle indicating content type -->
+                            <p>{{content.publish_time_processed}}</p>
+                            <bold><p>{{content.title}}</p></bold>
+                        </div>
+                    `
+                    $("#day"+{{content.day}}).append(html);
+                Insert it 
+
+
+ -->

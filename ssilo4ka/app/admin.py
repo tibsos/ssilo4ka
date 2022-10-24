@@ -2,6 +2,7 @@ from django.contrib import admin as a
 from .models import Block,Link
 from .design import *
 from .analytics import *
+from .features import *
 
 # Blocks
 a.site.register(Block)
@@ -17,3 +18,5 @@ a.site.register(PageActivity)
 a.site.register(LinkActivity)
 a.site.register(ProfileActivity)
 a.site.register(Activity)
+# Features
+a.site.register(RedirectLink)

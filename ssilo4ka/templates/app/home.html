@@ -1,75 +1,67 @@
 {%load static%}
+{%load compress%}
 <!DOCTYPE html>
 <html>
 
     <head>
         <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
         <link rel='stylesheet' href="{%static 'css/app/home.css'%}">
+        <link rel='stylesheet' href="{%static 'css/app/nav.css'%}">
+        {%compress css%}
+            <link rel='stylesheet' type="text/x-scss" href="{%static 'scss/app/methods/button-activity.scss'%}">
+        {%endcompress%}
     </head>
 
     <body>
-
         <div class="main">
-            <div class='nav'>
-                <div class="logo"><a href="{%url 'link:home'%}">ssilo4ka logo</a></div>
-                <div class="left">
-                    <ul class="links">
-                        <li class="link">
-                            <a href="{%url 'link:home'%}">Ссылки</a>
-                        </li>
-                        <li>
-                            <a href="{%url 'link:design'%}">Дизайн</a>
-                        </li>
-                        <li>
-                            <a href="{%url 'link:analytics'%}">Аналитика</a>
-                        </li>
-                        <li>
-                            <a href="{%url 'link:settings'%}">Настройки</a>
-                        </li>
-                    </ul>   
-                </div>
-                <div class="right">
-                    <ul class="links-right">
-                        <li>
-                            <a href="{%url 'link:upgrade'%}">Премиум</a>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <a href="{%url 'user:logout'%}">Выйти</a>
-                        </li>
 
-                    </ul>
-                </div>
+            <div class="nav">
+
+                {%include 'app/nav.html'%}
             </div>
+            
+        <div class="app">
 
-                
-        <div class="methods">
-            <form method="POST">
-                {%csrf_token%}
-            <button hx-post="{%url 'link:add-link'%}" hx-target="#blocks">Добавить новую ссылку</button>
-            </form>
-            <button id="delete-all">Удалить все</button>
-        </div>
-        <div id="blocks">
-            {%include 'app/links/blocks.html'%}
+            <div class="methods">
+                <!-- Add link/plugin -->
+                <form method="POST">
+                    {%csrf_token%}
+                <button hx-post="{%url 'app:add-link'%}" hx-target="#blocks">Добавить новую ссылку</button>
+                </form>
+                <!-- Delete -->
+                <button id="delete-all">Удалить все</button>
+                <div id="delete-all-form" class="delete-all" style="display:none;">
+                    <h4>Начнем с чистого листа?</h4>
+                    <form method="POST">
+                        {%csrf_token%}
+                        <button hx-post="{% url 'app:delete-all'%}" hx-target="#blocks" id="delete-all-btn">Удалить</button>
+                    </form>
+                    <button id="cancel">Отмена</button>
+                </div>
+                </div>
+            
+
+            <!-- Blocks -->
+            <div id="blocks" class="blocks">
+                {%include 'app/links/blocks.html'%}
+            </div>
+            
         </div>
         
-    </div>
+        <div class="preview">
 
-    <div id="delete-all-form" class="delete-all" style="display:none;">
-        <h4>Начнем с чистого листа?</h4>
-        <form method="POST">
-            {%csrf_token%}
-            <button hx-post="{% url 'link:delete-all'%}" hx-target="#blocks" id="delete-all-btn">Удалить</button>
-        </form>
-        <button id="cancel">Отмена</button>
-    </div>
+        </div>
+                
+        
 
-    </body>
+    </div>
+</div>
+</body>
 
     <script>
 
