@@ -1,3 +1,5 @@
+{%load static%}
+
 <!-- 
 <button id="buzz" style="position:absolute;top:200px;right:500px; width:300px; height:40px;">Гудок</button>
  <button id="wobble" style="position:absolute;top:300px;right:500px; width:300px; height:40px;">Качели</button>
@@ -54,22 +56,17 @@
 }
 </style>
 
-    
+{% if blocks%}
+<script src="{%static 'js/app/blocks/function-icons.js' %}" async></script>
+<script src="{%static 'js/app/blocks/functions.js' %}" async></script>
+<script src="{%static 'js/app/blocks/methods.js' %}" async></script>
+
 {%for block in blocks%}
     <div class="block" id="block{{block.uid}}">
         <div id="blockContents{{block.uid}}">
 
-            
-            <input type="checkbox" id="toggle-input">
-<label for="toggle-input">
-	<span>
-		<svg width="10px" height="10px"><path d="M5,1 L5,1 C2.790861,1 1,2.790861 1,5 L1,5 C1,7.209139 2.790861,9 5,9 L5,9 C7.209139,9 9,7.209139 9,5 L9,5 C9,2.790861 7.209139,1 5,1 L5,9 L5,1 Z"></path></svg>
-	</span>
-</label>
-            
-            
-            
             {% if block.link%}
+
             <input class="field" name="title" value="{{block.link.title}}" id="{{block.uid}}" placeholder="Заголовок" onfocusout="updateTitle(this.id,this.value)">
             <input class='field' name="url"  value="{{block.url}}" id="{{block.uid}}" placeholder="Ссылка" onfocusout="updateURL(this.id,this.value)">
             
@@ -82,9 +79,9 @@
                     <li>
                         <!-- Thumbnail -->
                     </li>
-                    <li onClick="redirectInit(this)">
+                    <li class="function" onClick="redirectInit(this)" id="{{block.uid}}">
                         <!-- Redirect -->
-                        <svg class="function-icon"  id="{{block.uid}}" viewBox="0 0 16 16" display="block" enable-background="new 0 0 24 24" ><g><path fill-rule="evenodd" clip-rule="evenodd" d="M1 5C1 3.34315 2.34315 2 4 2C5.65685 2 7 3.34315 7 5V8H4C2.34315 8 1 6.65685 1 5ZM4 1C6.20914 1 8 2.79086 8 5V8H13.7929L11.1464 5.35355L11.8536 4.64645L15.3536 8.14645V8.85355L11.8536 12.3536L11.1464 11.6464L13.7929 9H8V16H7V9H4C1.79086 9 0 7.20914 0 5C0 2.79086 1.79086 1 4 1Z" fill="currentColor"></path></g></svg>
+                        <svg class="function-icon" viewBox="0 0 16 16" display="block" enable-background="new 0 0 15 15" ><g><path fill-rule="evenodd" clip-rule="evenodd" d="M1 5C1 3.34315 2.34315 2 4 2C5.65685 2 7 3.34315 7 5V8H4C2.34315 8 1 6.65685 1 5ZM4 1C6.20914 1 8 2.79086 8 5V8H13.7929L11.1464 5.35355L11.8536 4.64645L15.3536 8.14645V8.85355L11.8536 12.3536L11.1464 11.6464L13.7929 9H8V16H7V9H4C1.79086 9 0 7.20914 0 5C0 2.79086 1.79086 1 4 1Z" fill="currentColor"></path></g></svg>
 
                         <label>Redirect</label>
                     </li>
@@ -105,82 +102,35 @@
                 <button onClick="deleteBlock(this)" class="delete-block" id="{{block.uid}}">Delete</button>
             {% endif %}
 
-        <div class="active-feature" id="activeFeature{{block.uid}}">
+        
             
         </div>
             </div>
-    </div>
-{%empty%}
-{%endfor%}
-
+    <div class="active-function" id="activeFunction{{block.uid}}">
         
+    </div>
+    {%endfor%}
+    {% else%}
+    {% endif%}
+
 
         
     <script>
-
-        function hideUndo(e){
-            block=$("#block"+e.id)
-            block.html('');
-            block.hide('slow');
-        }
-
-        function deleteBlock(e){
-
-            uid=e.id
-
-            let undoHTML=`
-            <bold><p>Блок удален. Хочешь его восстановить?</p></bold>
-            <button>Да</button>
-            <button onClick="hideUndo(this)" id="${uid}">X</button>
-        `
-
-            
-            block=$('#block'+uid);
-            blockContents=$('#blockContents'+uid);
-            blockContents.animate({'opacity': '0'}, 400).promise().done(function(){
-                blockContents.html(undoHTML);
-                $(function () {
-                    block.animate({
-                    height: '60px'
-                    }, { duration: 500, queue: false });
-
-                    block.animate({
-                    'border-radius': '50px'
-                    }, { duration: 900, queue: false });
-                })
-                /* Spam animation to wait out before showing html */
-                block.animate({'opacity':'1'},500).promise().done(function(){
-                    blockContents.animate({
-                        'opacity':1
-                    });
-                });
-            });
-            
-
-            $.ajax({
-                method:'POST',
-                url:"{% url 'app:delete-block'%}",
-                data:{
-                    'csrfmiddlewaretoken':"{{csrf_token}}",
-                    'uid':e.id,
-                },
-            })
-
-        }
-
-        /* Features */
-
-        /* Redirect */
         function redirectInit(el){
             
             uid=el.id;
 
+            fun=$("#activeFunction"+uid)
+            contents=$('#activeFunctionContents'+uid)
+            
+            /* Set the redirect icon to unclickable */
+
             /* Fade out previous content */
-            $("#activeFeature"+uid).innerHTML='';
+            fun.html('');
 
             /* Fade in new content */
             html=`
-            <div class='contents' id='contents${uid}'>
+            <div class='contents' id='contents${uid}' style="opacity:0;">
                 <h4 class="title">Works!</h4>
                 <div class="content" id="content${uid}">
                     <p>Explanation</p>
@@ -188,47 +138,14 @@
                 </div>
             </div>
             `
-            $(html).appendTo($('#activeFeature'+uid));  
-        }
 
-        
-        function updateTime(i){
-            time=i.value;
-            alert('y');
-            $.ajax({
-                method:'POST',
-                url:"{%url 'app:redirect-update-time' %}",
-                data:{
-                    'csrfmiddlewaretoken':'{{csrf_token}}',
-                    'time':time,
-                },
-            })
+            fun.animate({height: '200px'},{ duration: 500 });
+            fun.html(html);
+            $("#contents"+uid).animate({opacity:0},500);
+            $("#contents"+uid).animate({opacity:1},1000);
+                
+            
         }
-
-        function updateDate(i){
-            date=i.val();
-            $.ajax({
-                method:'POST',
-                url:"{%url 'app:redirect-update-date' %}",
-                data:{
-                    'csrfmiddlewaretoken':'{{csrf_token}}',
-                    'time':date,
-                },
-            })
-        }
-
-        function updateTimezone(i){
-            date=i.val();
-            $.ajax({
-                method:'POST',
-                url:"{%url 'app:redirect-update-date' %}",
-                data:{
-                    'csrfmiddlewaretoken':'{{csrf_token}}',
-                    'time':date,
-                },
-            })
-        }
-        
 
         function createRedirectLink(el){
         
@@ -271,7 +188,12 @@
                     <div class='form'>
                         <input type="date" id="date" value='${date}'>
                         <input type="time" id="time" value='${time}' onChange="updateTime(this)">
-                            {{timezone_form.timezone}}
+                        <select id="tz" name="tz" >
+                            <option value="saab">Saab</option>
+                            <option value="fiat">Fiat</option>
+                            <option value="+3" selected>UTC +3 | Московское время</option>
+                            <option value="audi">Audi</option>
+                        </select>
                     </div>
                 `
 
@@ -301,6 +223,10 @@
             });
             
         }
+
+        
+
+        
         
 
     
@@ -377,45 +303,5 @@
             gradient();     
         }
         gradient();
-        function blockActivity(uid){
-            $.ajax({
-            url:"{%url 'app:block-activity'%}",
-            data:{
-                "csrfmiddlewaretoken":"{{csrf_token}}",
-                'uid':uid,
-            },
-            method:"POST",
-            });
-        };
-        function updateTitle(uid,title){
-            $.ajax({
-            url:"{%url 'app:update-title'%}",
-            data:{
-                "csrfmiddlewaretoken":"{{csrf_token}}",
-                'uid':uid,
-                'title':title,
-            },
-            method:"POST",
-            });
-        };
-        function updateURL(uid,url){
-            if(/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test( url )===true){
-                document.getElementById('urlError').style.display='none';
-                $.ajax({
-                url:"{%url 'app:update-url'%}",
-                    data:{
-                        "csrfmiddlewaretoken":"{{csrf_token}}",
-                        'uid':uid,
-                        'url':url,
-                    },
-                    method:"POST",
-                });
-            }
-            else if(url==''){
-                document.getElementById('urlError').style.display='none';
-            }
-            else{
-                document.getElementById('urlError').style.display='';
-            }    
-        };
+        
     </script>

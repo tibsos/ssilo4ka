@@ -7,7 +7,7 @@ from user.models import Profile
 from .models import Block,Link
 from .design import Theme
 
-from .forms import AvatarForm,RedirectDateTimeForm,TimezoneForm
+from .forms import AvatarForm
 
 from .features import RedirectLink
 
@@ -26,6 +26,7 @@ def ssilo4ka(request,username):
     user=get_object_or_404(User,username=username)
     profile=user.profile
     c['profile']=profile
+    c['profile']=profile
     if profile.priority_link:
         return redirect(profile.priority_link.priority.url)
 
@@ -40,8 +41,6 @@ def home(request):
     c={}
     c['profile']=profile
     c['blocks']=profile.block.all()
-    c['datetime_form']=RedirectDateTimeForm()
-    c['timezone_form']=TimezoneForm()
 
     return render(request,'app/home.html',c)
 

@@ -135,30 +135,28 @@ body{
 }
 
 .functions{
-    display:flex;
+    
 }
 
 .functions-list{
     position:relative;
     right:-20px;
     top:5px;
+    display: inline;
     
 }
 
-.functions-list li{
-    
-    width:15px;
-    height:15px;
-    
-    color:grey;
-    
-    cursor:pointer;
-    
-    display:inline;
+
+
+svg{
+    margin:0;
+    padding:0;
 }
 
-.functions-list li:hover{
-    color:black;
+.function{
+    width:20px;
+    height:20px;
+    cursor: pointer;
 }
 
 .function-icon{
@@ -171,23 +169,29 @@ body{
     cursor:pointer;
 }
 
-.function-icon:hover{
-    color:black;
-}
 
 
-.functions-list label{
+
+.function label{
     display:none;
 }
 
 .active-function{
-    width:100%;
+    width:85%;
     height:0px;
     margin-top:2px;
+    margin-top:10px;
+    margin-bottom:10px;
     background-color:#fff;
+    border-radius:20px;
+    
 }
 
-.function-title
+.active-function .contents{
+    position: relative;
+    top:20px;
+    left:20px;
+}
 
 .function-title h4{
     padding:0;

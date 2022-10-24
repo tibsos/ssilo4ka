@@ -14,15 +14,3 @@ class DateInput(f.DateInput):
 
 class TimeInput(f.TimeInput):
     input_type='time'
-
-
-class RedirectDateTimeForm(f.Form):
-    date=f.DateField(widget=DateInput(attrs={'id':'redirect-date'}))
-    time=f.TimeField(widget=TimeInput(attrs={'id':'redirect-time'}))
-
-
-class TimezoneForm(f.ModelForm):
-    gender = ChoiceField(widget=f.Select(attrs={'onChange':'updateTimezone();'}))
-    class Meta:
-        model=RedirectLink
-        fields=('timezone',)
