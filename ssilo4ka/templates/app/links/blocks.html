@@ -79,12 +79,24 @@
                     <li>
                         <!-- Thumbnail -->
                     </li>
-                    <li class="function" onClick="redirectInit(this)" id="{{block.uid}}">
-                        <!-- Redirect -->
-                        <svg class="function-icon" viewBox="0 0 16 16" display="block" enable-background="new 0 0 15 15" ><g><path fill-rule="evenodd" clip-rule="evenodd" d="M1 5C1 3.34315 2.34315 2 4 2C5.65685 2 7 3.34315 7 5V8H4C2.34315 8 1 6.65685 1 5ZM4 1C6.20914 1 8 2.79086 8 5V8H13.7929L11.1464 5.35355L11.8536 4.64645L15.3536 8.14645V8.85355L11.8536 12.3536L11.1464 11.6464L13.7929 9H8V16H7V9H4C1.79086 9 0 7.20914 0 5C0 2.79086 1.79086 1 4 1Z" fill="currentColor"></path></g></svg>
-
-                        <label>Redirect</label>
-                    </li>
+                    {%if block.redirect%}
+                        <li class="function" onClick="viewRedirect(this)" id="{{block.uid}}">
+                            <!-- Redirect -->
+                            <svg class="function-icon" style="color:green;" viewBox="0 0 16 16" display="block" enable-background="new 0 0 15 15" ><g><path fill-rule="evenodd" clip-rule="evenodd" d="M1 5C1 3.34315 2.34315 2 4 2C5.65685 2 7 3.34315 7 5V8H4C2.34315 8 1 6.65685 1 5ZM4 1C6.20914 1 8 2.79086 8 5V8H13.7929L11.1464 5.35355L11.8536 4.64645L15.3536 8.14645V8.85355L11.8536 12.3536L11.1464 11.6464L13.7929 9H8V16H7V9H4C1.79086 9 0 7.20914 0 5C0 2.79086 1.79086 1 4 1Z" fill="currentColor"></path></g></svg>
+                            
+                            <label>Redirect</label>
+                            <input type="text" style="display:none" id="redirectDate" value="{{block.redirect_end_date}}">
+                            <input type="text" style="display:none" id="redirectTime" value="{{block.redirect.end_time}}">
+                            <input type="text" style="display:none" id="redirectTimezone" value="{{block.redirect.timezone}}">
+                        </li>
+                    {%else%}
+                        <li class="function" onClick="redirectInit(this)" id="{{block.uid}}">
+                            <!-- Redirect -->
+                            <svg class="function-icon" viewBox="0 0 16 16" display="block" enable-background="new 0 0 15 15" ><g><path fill-rule="evenodd" clip-rule="evenodd" d="M1 5C1 3.34315 2.34315 2 4 2C5.65685 2 7 3.34315 7 5V8H4C2.34315 8 1 6.65685 1 5ZM4 1C6.20914 1 8 2.79086 8 5V8H13.7929L11.1464 5.35355L11.8536 4.64645L15.3536 8.14645V8.85355L11.8536 12.3536L11.1464 11.6464L13.7929 9H8V16H7V9H4C1.79086 9 0 7.20914 0 5C0 2.79086 1.79086 1 4 1Z" fill="currentColor"></path></g></svg>
+                            
+                            <label>Redirect</label>
+                        </li>
+                    {%endif%}
                     <li>
                         <!-- Lock -->
                     </li>
@@ -116,120 +128,125 @@
 
         
     <script>
-        function redirectInit(el){
-            
-            uid=el.id;
+    
+    function createRedirectLink(el){
 
-            fun=$("#activeFunction"+uid)
-            contents=$('#activeFunctionContents'+uid)
-            
-            /* Set the redirect icon to unclickable */
+        uid=el.id;
 
-            /* Fade out previous content */
-            fun.html('');
+        /* Make icon green */
+        $('svg, #'+uid).animate({color:'green'},1000)
+        /* Deal with form values */
 
-            /* Fade in new content */
+        let tomorrow =  new Date()
+        tomorrow.setDate(tomorrow.getDate() + 1)
+
+
+        year=tomorrow.getFullYear();
+        month=tomorrow.getMonth()+1;
+        day=tomorrow.getDate();
+        hours=tomorrow.getHours();
+        minutes=tomorrow.getMinutes();
+
+        if(month.toString().length===1){
+            month='0'+month;
+        }
+        if(day.toString().day===1){
+            day='0'+day;
+        }
+        if(hours.toString().length===1){
+            hours='0'+hours;
+        }
+        if(minutes.toString().length===1){
+            minutes='0'+minutes;
+        }
+
+        let time = hours + ':' + minutes;
+        let date = year.toString() + '-' + month + '-' + day;
+
+        content=$('#content'+uid);
+        content.animate({ opacity: "0" }, 300 );
+
+        $(content).promise().done(function(){
             html=`
-            <div class='contents' id='contents${uid}' style="opacity:0;">
-                <h4 class="title">Works!</h4>
-                <div class="content" id="content${uid}">
-                    <p>Explanation</p>
-                    <button onClick=createRedirectLink(this) id="${uid}">Confirm</button>
+                <div class='countdown'>
+                    <div id="countdown">
                 </div>
-            </div>
+                <div class='form'>
+                    <input type="date" id="date" value='${date}'>
+                    <input type="time" id="time" value='${time}' onChange="updateTime(this)">
+                    <select id="tz" name="tz" >
+                        <option value="saab">Saab</option>
+                        <option value="fiat">Fiat</option>
+                        <option value="+3" selected>UTC +3 | Московское время</option>
+                        <option value="audi">Audi</option>
+                    </select>
+                </div>
             `
 
-            fun.animate({height: '200px'},{ duration: 500 });
-            fun.html(html);
-            $("#contents"+uid).animate({opacity:0},500);
-            $("#contents"+uid).animate({opacity:1},1000);
-                
-            
-        }
-
-        function createRedirectLink(el){
-        
-            uid=el.id;
-            
-            let tomorrow =  new Date()
-            tomorrow.setDate(tomorrow.getDate() + 1)
-            
-
-            year=tomorrow.getFullYear();
-            month=tomorrow.getMonth()+1;
-            day=tomorrow.getDate();
-            hours=tomorrow.getHours();
-            minutes=tomorrow.getMinutes();
-            
-            if(month.toString().length===1){
-                month='0'+month;
-            }
-            if(day.toString().day===1){
-                day='0'+day;
-            }
-            if(hours.toString().length===1){
-                hours='0'+hours;
-            }
-            if(minutes.toString().length===1){
-                minutes='0'+minutes;
-            }
-
-            let time = hours + ':' + minutes;
-            let date = year.toString() + '-' + month + '-' + day;
-
-            content=$('#content'+uid);
-            content.animate({ opacity: "0" }, 300 );
-            
-            $(content).promise().done(function(){
-                html=`
-                    <div class='countdown'>
-                        <div id="countdown">
-                    </div>
-                    <div class='form'>
-                        <input type="date" id="date" value='${date}'>
-                        <input type="time" id="time" value='${time}' onChange="updateTime(this)">
-                        <select id="tz" name="tz" >
-                            <option value="saab">Saab</option>
-                            <option value="fiat">Fiat</option>
-                            <option value="+3" selected>UTC +3 | Московское время</option>
-                            <option value="audi">Audi</option>
-                        </select>
-                    </div>
-                `
-
-               $.ajax({
-                method:'POST',
-                url:"{% url 'app:create-redirect-link'%}",
-                data:{
-                    'csrfmiddlewaretoken':'{{csrf_token}}',
-                    'uid':uid,
-                },        
-                });
-                content.html(html);
-                setInterval(function time(){
-                    var d = new Date();
-                    var hours = 24 - d.getHours();
-                    var min = 60 - d.getMinutes();
-                    if((min + '').length == 1){
-                        min = '0' + min;
-                    }
-                    var sec = 60 - d.getSeconds();
-                    if((sec + '').length == 1){
-                            sec = '0' + sec;
-                    }
-                    jQuery('#countdown').html(hours+':'+min+':'+sec)
-                });
-                content.animate({ opacity: "1" }, 300 );
+        $.ajax({
+            method:'POST',
+            url:"{% url 'app:create-redirect-link'%}",
+            data:{
+                'csrfmiddlewaretoken':'{{csrf_token}}',
+                'uid':uid,
+            },        
             });
-            
-        }
-
-        
-
-        
-        
+            content.html(html);
+            setInterval(function time(){
+                var d = new Date();
+                var hours = 24 - d.getHours();
+                var min = 60 - d.getMinutes();
+                if((min + '').length == 1){
+                    min = '0' + min;
+                }
+                var sec = 60 - d.getSeconds();
+                if((sec + '').length == 1){
+                        sec = '0' + sec;
+                }
+                jQuery('#countdown').html(hours+':'+min+':'+sec)
+            });
+            content.animate({ opacity: "1" }, 300 );
+        });
 
     
+    }
+
+    function updateTime(i){
+    time=i.value;
+    $.ajax({
+        method:'POST',
+        url:"{%url 'app:redirect-update-time' %}",
+        data:{
+            'csrfmiddlewaretoken':'{{csrf_token}}',
+            'time':time, 
+        },
+    })
+}
+
+    function updateDate(i){
+        date=i.val();
+        $.ajax({
+            method:'POST',
+            url:"{%url 'app:redirect-update-date' %}",
+            data:{
+                'csrfmiddlewaretoken':'{{csrf_token}}',
+                'time':date,
+            },
+        })
+    }
+
+    function updateTimezone(i){
+        date=i.val();
+        $.ajax({
+            method:'POST',
+            url:"{%url 'app:redirect-update-date' %}",
+            data:{
+                'csrfmiddlewaretoken':'{{csrf_token}}',
+                'time':date,
+            },
+        })
+    }
+
     /* Roll down/up animation */
 
         document.body.addEventListener('htmx:configRequest',(event)=>{

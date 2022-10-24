@@ -1,5 +1,5 @@
-from curses.ascii import HT
 from django.shortcuts import render,HttpResponse,redirect,get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 from django.contrib.auth.models import User
@@ -33,14 +33,20 @@ def ssilo4ka(request,username):
     return render(request,'ssilo4ka.html',c)
 
 # Links
-
+@login_required
 def home(request):
     
     profile=Profile.objects.get(user=request.user)
 
     c={}
     c['profile']=profile
-    c['blocks']=profile.block.all()
+    
+    blocks=profile.block.all()
+    blocks_delete=blocks.filter(to_delete=True)
+    if len(blocks_delete)>0:
+        for block in range(len(blocks)):
+            block.delete()
+    c['blocks']=blocks.filter(to_delete=False)
 
     return render(request,'app/home.html',c)
 
@@ -88,9 +94,9 @@ def create_redirect_link(request):
     block_uid=request.POST.get('uid')
     block=Block.objects.get(uid=block_uid)
     
-    profile.redirect_link=block
-    profile.save()
-
+    if profile.redirect_link:
+        #profile.redirect_link.delete()
+        pass
     time=datetime.today()
     tomorrow=time+timedelta(hours=24)
 
@@ -100,6 +106,9 @@ def create_redirect_link(request):
     redirect_link=RedirectLink.objects.create(end_date=end_date,end_time=end_time,timezone='+3')
     block.redirect=redirect_link
     block.save()
+
+    profile.redirect_link=block
+    profile.save()
 
     return HttpResponse('K')
 
@@ -121,21 +130,21 @@ def redirect_update_time(request):
     redirect_object=profile.redirect_link.redirect
 
     new_time=request.POST.get('time')
-    processed_time=''
     timezone=redirect_object.timezone
-    new_time='02:22'
-    timezone='+4'
+
     if timezone!='+3':
 
         timezone_operator=timezone[0]
-        timezone_digit=timezone[1]
+        timezone_digit=int(timezone[1])
 
         time=new_time.split(':')
         hours=time[0]
-        minutes=time[1]
+        minutes=int(time[1])
 
         if len(hours)==2 and hours[0]=='0':
-            hours=hours[1]
+            hours=int(hours[1])
+        else:
+            hours=int(hours)
 
         if timezone_operator=='-':
             hours=hours-timezone_digit-3
@@ -148,13 +157,18 @@ def redirect_update_time(request):
             if timezone_digit>3:
                 to_add=timezone_digit-3
                 hours=hours+to_add
-                if int(hours)>24:
-                    hours=hours-24
-                    # new_time = 
             else:
                 to_subtract=3-timezone_digit
                 hours=hours-to_subtract
-                # same logic as in (-) case
+    if int(hours)>24:
+        hours=hours-24
+        # add 1 day to date
+    elif int(hours)<24:
+        hours=abs(hours)
+        # subtract 1 day from date
+
+    new_time=f"{hours}:{minutes}"
+    print(new_time)
 
     redirect_object.end_time=new_time
     redirect_object.save()
@@ -186,13 +200,24 @@ def add_link(request):
 
 def delete_block(request):
 
-    Block.objects.get(uid=request.POST.get('uid')).delete()
+    block=Block.objects.get(uid=request.POST.get('uid'))
+    block.to_delete=True
+    block.save()
+
+
+    return HttpResponse('K')
+
+def undo_block_delete(request):
+
+    block=Block.objects.get(uid=request.POST.get('uid'))
+    block.to_delete=False
+    block.save()
 
     return HttpResponse('K')
 
 def delete_all(request):
     profile=Profile.objects.get(user=request.user)
-    profile.block.all().delete()
+    blocks=profile.block.all().delete()
     return render(request,'app/links/blocks.html',{'blocks':None})
 
 

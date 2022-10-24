@@ -61,12 +61,12 @@ def landing_register(request,username):
 
 def log_in(request):
     if request.user.is_authenticated:
-        return redirect('link:landing')
+        return redirect('app:home')
     else:
         if request.method=='POST':
             user=authenticate(username=request.POST.get('username'),password=request.POST.get('password'))
             login(request,user)
-            return redirect('link:home')
+            return redirect('app:home')
 
         return render(request,'auth/login.html')
         
