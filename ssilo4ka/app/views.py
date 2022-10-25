@@ -160,14 +160,18 @@ def redirect_update_time(request):
             else:
                 to_subtract=3-timezone_digit
                 hours=hours-to_subtract
-    if int(hours)>24:
-        hours=hours-24
-        # add 1 day to date
-    elif int(hours)<24:
-        hours=abs(hours)
-        # subtract 1 day from date
 
-    new_time=f"{hours}:{minutes}"
+        if int(hours)>24:
+            hours=hours-24
+            # add 1 day to date
+        elif int(hours)<24:
+            hours=abs(hours)
+            # subtract 1 day from date
+        new_time=f"{hours}:{minutes}"
+
+    
+
+    
     print(new_time)
 
     redirect_object.end_time=new_time

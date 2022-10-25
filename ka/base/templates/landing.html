@@ -1,0 +1,60 @@
+{%load static%}
+{%load compress%}
+<!DOCTYPE html>
+<html data-react-helmet="lang" lang="ru">
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        
+        <meta data-react-helmet="true" name="description" content="Join 25M+ people and link to everything you create, share and sell online. All from the one bio link.">
+
+        <meta data-react-helmet="true" property="og:site_name" content="Ссылочка">
+        <meta data-react-helmet="true" property="og:title" content="Ссылочка: Твоя онлайн жизнь">
+        <meta data-react-helmet="true" property="og:" content="Join 25M+ people and link to everything you create, share and sell online. All from the one bio link.">
+        <meta data-react-helmet="true" property="og:description" content="Ссылочка">
+        <meta data-react-helmet="true" property="og:locale" content="ru">
+        <meta data-react-helmet="true" property="og:type" content="website">
+        <meta data-react-helmet="true" property="og:image" content="">
+        
+
+        <meta name="theme-color" content="f3f3f1">
+        <link rel="icon" href="" type="image/jpg">
+
+        <title>Ссылочка</title>
+        {% compress css%}
+        <link rel="stylesheet" href="{%static 'scss/base/landing.scss'%}" type="text/x-scss">
+        {% endcompress %}
+        
+    </head>
+
+    <body>
+
+        <div class="wrapper1">
+            <div class="content">
+                <h1>
+                    Вся твоя онлайн жизнь. В одной ссылке ;)
+                </h1>
+                <p>
+                    Присоединяйся к более миллионам людей и делись всем, что ты создаешь.
+                </p>
+                {% if not authenticated%}
+                <div class="username-form">
+                    <form method="POST">
+                        {%csrf_token%}
+                        <p>ssilo4ka.ru/</p>
+                        <input name="username" placeholder="ник">
+                        <button>Получи свою ссылку</button>
+                    </form>
+                </div>
+                {% endif%}
+            </div>
+            <div class="animation">
+
+            </div>
+        </div>
+
+    </body>
+</html>

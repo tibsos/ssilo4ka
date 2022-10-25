@@ -1,60 +1,5 @@
 {%load static%}
 
-<!-- 
-<button id="buzz" style="position:absolute;top:200px;right:500px; width:300px; height:40px;">Гудок</button>
- <button id="wobble" style="position:absolute;top:300px;right:500px; width:300px; height:40px;">Качели</button>
-
-<button id="pop" style="position:absolute;top:120px;right:500px; width:300px; height:40px; transition: all 0.3s ease-in-out;">Напоказ/Выскочка</button>  
-
-<button id="color" class="pop">Градиент</button>
-<button class="pulse">Пульс</button> -->
-
-<style>
-    .pop{
-        position: absolute;
-        top:450px;
-        right:300px;
-        width:300px; 
-        height:40px; 
-        transition: all 2s;
-        background-color:blue;
-        transition: background 0.5s linear; 
-    }
-</style>
-<style>
-
-.pulse {
-    position:absolute;
-    top:350px;
-    right:250px;
-    background: black;
-    color:white;
-    border-radius: 20px;
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
-    margin: 10px;
-    height: 40px;
-    width: 300px;
-    transform: scale(1);
-    animation: pulse-black 2s infinite;
-}
-
-@keyframes pulse-black {
-0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
-}
-
-70% {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
-}
-
-100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-}
-}
-</style>
 
 {% if blocks%}
 <script src="{%static 'js/app/blocks/function-icons.js' %}" async></script>
@@ -63,12 +8,12 @@
 
 {%for block in blocks%}
     <div class="block" id="block{{block.uid}}">
-        <div id="blockContents{{block.uid}}">
+        <div id="blockContents{{block.uid}}" class="contents">
 
             {% if block.link%}
 
-            <input class="field" name="title" value="{{block.link.title}}" id="{{block.uid}}" placeholder="Заголовок" onfocusout="updateTitle(this.id,this.value)">
-            <input class='field' name="url"  value="{{block.url}}" id="{{block.uid}}" placeholder="Ссылка" onfocusout="updateURL(this.id,this.value)">
+            <input class="field title" name="title" value="{{block.link.title}}" id="{{block.uid}}" placeholder="Заголовок" onfocusout="updateTitle(this.id,this.value)">
+            <input class='field url' name="url"  value="{{block.url}}" id="{{block.uid}}" placeholder="Ссылка" onfocusout="updateURL(this.id,this.value)">
             
             <div class="functions">
                 <ul class="functions-list">
@@ -117,7 +62,7 @@
         
             
         </div>
-            </div>
+    </div>
     <div class="active-function" id="activeFunction{{block.uid}}">
         
     </div>

@@ -1,0 +1,105 @@
+{%load static%}
+{%load compress%}
+
+<!DOCTYPE html>
+<html data-react-helmet="lang" lang="ru">
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>Ссылочка регистрация</title>
+        <meta data-react-helmet="true" name="description" content="Join 25M+ people and link to everything you create, share and sell online. All from the one bio link.">
+
+        <meta data-react-helmet="true" property="og:site_name" content="Ссылочка">
+        <meta data-react-helmet="true" property="og:title" content="Ссылочка: Твоя онлайн жизнь">
+        <meta data-react-helmet="true" property="og:" content="Join 25M+ people and link to everything you create, share and sell online. All from the one bio link.">
+        <meta data-react-helmet="true" property="og:description" content="Ссылочка">
+        <meta data-react-helmet="true" property="og:locale" content="ru">
+        <meta data-react-helmet="true" property="og:type" content="website">
+        <meta data-react-helmet="true" property="og:image" content="">
+        
+
+        <meta name="theme-color" content="f3f3f1">
+        <link rel="icon" href="" type="image/jpg">
+
+        
+
+        <!-- Scripts -->
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <script type="text/javascript" src="{% static 'js/auth/register.js'%}"></script>
+        
+    </head>
+
+    <body>
+
+       <div class="main">
+
+           <a href="{%url 'base:landing'%}">Ссыло4ка</a>
+
+            <div class="register">
+                
+                
+                <div class="cta">
+                    <h1>Создай свою ссылку</h1>
+                    <h4>Придумай себе ник. <br>Ты всегда можешь поменять его позже.</h4>
+                </div>
+                
+                <div class="form">
+                    <form method="POST">
+                        {%csrf_token%}
+                        
+                        <div class="fields" id="first">
+
+                            <div class="field" id="usernameField">
+                                <h1 class="domain">ssilo4ka.ru/</h1>
+                                <input name="username" id="username" class="username" placeholder="ник" value="{{username}}" autocomplete="off">
+                                <svg style="display:none;" id="emailSVG" width="22px" height="22px" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="circleOkIconTitle" stroke="green" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"> <title id="circleOkIconTitle">OK</title> <polyline points="7 13 10 16 17 9"/> <circle cx="12" cy="12" r="10"/> </svg> 
+                            </div>
+                            <div id="usernameErrors" class="errors"></div>
+                            
+                            <div class="field" id="emailField">
+                                <label id="email-label" class="email-label">Электронная почта</label>
+                                <input name="email" id="email" class="email">
+                                <svg style="display:none;" id="emailSVG" width="22px" height="22px" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="circleOkIconTitle" stroke="green" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"> <title id="circleOkIconTitle">OK</title> <polyline points="7 13 10 16 17 9"/> <circle cx="12" cy="12" r="10"/> </svg>
+                            </div>
+
+                            <div class="emailErrors" class="errors"></div>
+
+                            <p class="agreement">
+                                Нажимая на кнопку "Создать ссылку", ты соглашаешься с нашими <a href="#">Условиями и Положениями</a>, и подтверждаешь, что ознакомился с нашей <a href="#">Политикой Конфиденциальности</a>.</p>
+                            </p>
+                            <button type="button" id="nextButton" onClick="nextForm()" class="btn-inactive" >Создать ссылку</button>
+
+                        </div>
+                            
+                        <div class="fields" id="second" style="opacity:0;">
+
+                            <button id="previousForm" class="previous">X</button>
+
+                            <div class="cta">
+                                <h1>Придумай свой пароль</h1>
+                            </div>
+
+                            <div class="field">
+                                <input type='password' name="password1" id="password" placeholder="Пароль">
+                                <button type="button" id="showPassword">Show Password</button>
+                            </div>
+                        </div>
+                        
+
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="image">
+
+            </div>
+       </div>
+
+    </body>
+
+</html>
